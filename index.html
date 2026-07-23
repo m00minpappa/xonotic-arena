@@ -1,0 +1,721 @@
+<title>XONOTIC: ARENA — Rulebook & Card Gallery</title>
+<style>
+  :root{
+    --bg:#080b11;
+    --bg2:#0c1017;
+    --panel:#121824;
+    --panel2:#161e2c;
+    --line:#26303f;
+    --line-soft:#1b2431;
+    --ink:#e8eef6;
+    --muted:#8593a6;
+    --muted2:#5f6d80;
+    --cyan:#31dbe6;
+    --cyan-dim:#1a99a3;
+    --mag:#ff3d84;
+    --amber:#ff9e3d;
+    --green:#49d67e;
+    --yellow:#ffd23d;
+    /* ammo colors */
+    --a-none:#b98bff;
+    --a-shells:#e0a94b;
+    --a-bullets:#9fb3c8;
+    --a-rockets:#ff6b3d;
+    --a-cells:#31dbe6;
+    --mono:ui-monospace,"Cascadia Code","SFMono-Regular","JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",sans-serif;
+    --maxw:1160px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 700px at 80% -10%, rgba(49,219,230,.08), transparent 60%),
+      radial-gradient(900px 600px at 0% 20%, rgba(255,61,132,.06), transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    font-size:16px;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  /* scanline / grid texture */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px);
+    background-size:100% 3px;
+    mix-blend-mode:overlay;opacity:.5;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px;position:relative;z-index:1}
+
+  /* ---- top HUD bar ---- */
+  header.hud{
+    position:sticky;top:0;z-index:20;
+    background:rgba(8,11,17,.82);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .hud-in{max-width:var(--maxw);margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:18px}
+  .brand{display:flex;align-items:baseline;gap:9px;font-family:var(--mono);font-weight:700;letter-spacing:.5px}
+  .brand .x{color:var(--cyan);text-shadow:0 0 14px rgba(49,219,230,.55)}
+  .brand .a{color:var(--ink)}
+  .brand .tag{color:var(--muted2);font-weight:500;font-size:12px;letter-spacing:2px;text-transform:uppercase}
+  nav.hud-nav{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap}
+  nav.hud-nav a{
+    font-family:var(--mono);font-size:12.5px;color:var(--muted);text-decoration:none;
+    padding:6px 10px;border-radius:6px;letter-spacing:.4px;transition:color .15s,background .15s;
+  }
+  nav.hud-nav a:hover{color:var(--cyan);background:rgba(49,219,230,.08)}
+  nav.hud-nav a:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+
+  /* ---- hero ---- */
+  .hero{padding:74px 0 40px;position:relative}
+  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin:0 0 18px}
+  .eyebrow::before{content:">_ ";color:var(--cyan-dim)}
+  h1.title{
+    font-family:var(--sans);font-weight:800;
+    font-size:clamp(42px,8vw,88px);line-height:.94;letter-spacing:-.03em;
+    text-wrap:balance;margin:0 0 8px;text-transform:uppercase;
+  }
+  h1.title .l1{display:block;color:var(--ink)}
+  h1.title .l2{display:block;color:transparent;-webkit-text-stroke:1.5px var(--cyan);text-stroke:1.5px var(--cyan);text-shadow:0 0 40px rgba(49,219,230,.25)}
+  .lede{max-width:60ch;color:var(--muted);font-size:clamp(16px,2.2vw,19px);margin:22px 0 0}
+  .lede b{color:var(--ink);font-weight:600}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+  .chip{
+    font-family:var(--mono);font-size:12px;letter-spacing:.5px;
+    border:1px solid var(--line);background:var(--panel);color:var(--muted);
+    padding:7px 12px;border-radius:999px;
+  }
+  .chip b{color:var(--cyan);font-weight:600}
+
+  /* ---- section scaffolding ---- */
+  section{padding:52px 0;border-top:1px solid var(--line-soft);position:relative}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+  .sec-num{font-family:var(--mono);font-size:13px;color:var(--cyan-dim);letter-spacing:1px}
+  h2{font-family:var(--sans);font-weight:800;font-size:clamp(26px,4vw,38px);letter-spacing:-.02em;margin:0;text-transform:uppercase}
+  .sec-sub{color:var(--muted);max-width:66ch;margin:14px 0 34px;font-size:16.5px}
+  .sec-sub code{font-family:var(--mono);color:var(--cyan);background:rgba(49,219,230,.08);padding:1px 6px;border-radius:5px;font-size:.9em}
+
+  /* ---- engine feature grid ---- */
+  .engine-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+  .pillar{
+    background:linear-gradient(180deg,var(--panel),var(--bg2));
+    border:1px solid var(--line);border-radius:12px;padding:20px;position:relative;overflow:hidden;
+  }
+  .pillar::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cyan);opacity:.7}
+  .pillar h3{font-family:var(--mono);font-size:14px;letter-spacing:.5px;margin:0 0 8px;color:var(--ink);text-transform:uppercase}
+  .pillar p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.55}
+  .pillar .kicker{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:12px}
+
+  /* ---- diagrams: arena row ---- */
+  .diagram{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:24px;margin:26px 0}
+  .diagram .dh{font-family:var(--mono);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);margin:0 0 18px}
+  .arena{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .loc{
+    border:1px solid var(--line);border-radius:10px;background:var(--panel);
+    min-height:96px;padding:12px 10px;display:flex;flex-direction:column;gap:6px;position:relative;
+  }
+  .loc .lname{font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:.5px}
+  .loc .item{font-family:var(--mono);font-size:12.5px;font-weight:600;margin-top:auto}
+  .loc.base{border-color:var(--cyan-dim);box-shadow:inset 0 0 30px rgba(49,219,230,.07)}
+  .loc.base .lname{color:var(--cyan)}
+  .loc.mid{border-color:var(--mag);box-shadow:inset 0 0 30px rgba(255,61,132,.08)}
+  .loc.mid .lname{color:var(--mag)}
+  .fighter{position:absolute;top:10px;right:10px;font-size:15px}
+  .item.mega{color:var(--green)}
+  .item.armor{color:var(--yellow)}
+  .item.pow{color:var(--mag)}
+  .item.ammo{color:var(--amber)}
+  .range-scale{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px}
+  .range-scale span{font-family:var(--mono);font-size:10.5px;text-align:center;color:var(--muted2);letter-spacing:1px}
+
+  /* ---- stack + momentum meters ---- */
+  .meters{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+  @media(max-width:640px){.meters{grid-template-columns:1fr}}
+  .meter{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .meter h4{font-family:var(--mono);font-size:12px;letter-spacing:1px;text-transform:uppercase;margin:0 0 14px;color:var(--ink)}
+  .bar{height:22px;border-radius:6px;background:var(--bg);border:1px solid var(--line);overflow:hidden;display:flex}
+  .bar i{display:block;height:100%}
+  .bar .hp{background:linear-gradient(90deg,#2f9d5b,var(--green));flex:0 0 50%}
+  .bar .ar{background:linear-gradient(90deg,#b8952a,var(--yellow));flex:0 0 25%}
+  .bar .over{background:repeating-linear-gradient(45deg,rgba(255,255,255,.16) 0 6px,transparent 6px 12px),var(--green);flex:0 0 20%;opacity:.65}
+  .meter .legend{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .meter .legend b{color:var(--ink);font-weight:600}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle}
+  .mombar{display:flex;gap:5px}
+  .mombar i{flex:1;height:26px;border-radius:4px;background:var(--bg);border:1px solid var(--line)}
+  .mombar i.on{background:linear-gradient(180deg,var(--cyan),var(--cyan-dim));border-color:var(--cyan);box-shadow:0 0 10px rgba(49,219,230,.4)}
+  .mombar i.air{background:linear-gradient(180deg,var(--mag),#a3245a);border-color:var(--mag);box-shadow:0 0 12px rgba(255,61,132,.5)}
+  .note{font-family:var(--mono);font-size:12px;color:var(--muted2);margin-top:12px;line-height:1.55}
+  .note b{color:var(--cyan)}
+
+  /* ---- turn steps ---- */
+  .turn{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:8px}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:16px 16px 18px;position:relative}
+  .step .n{font-family:var(--mono);font-size:12px;color:var(--bg);background:var(--cyan);font-weight:700;width:24px;height:24px;border-radius:6px;display:grid;place-items:center;margin-bottom:12px}
+  .step h4{margin:0 0 6px;font-size:15px;font-family:var(--mono);letter-spacing:.3px}
+  .step p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.5}
+
+  /* ---- card galleries ---- */
+  .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:15px}
+  .card{
+    background:linear-gradient(180deg,var(--panel2),var(--bg2));
+    border:1px solid var(--line);border-radius:12px;padding:0;overflow:hidden;
+    position:relative;transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease;
+  }
+  .card:hover{transform:translateY(-3px);border-color:var(--ac);box-shadow:0 10px 30px rgba(0,0,0,.4),0 0 0 1px var(--ac)}
+  .card .edge{height:4px;width:100%;background:var(--ac);box-shadow:0 0 16px var(--ac)}
+  .card .body{padding:15px 16px 17px}
+  .card .top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .card .wname{font-family:var(--sans);font-weight:800;font-size:18px;letter-spacing:-.01em;text-transform:uppercase;line-height:1.05}
+  .card .ammo{
+    font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;
+    border:1px solid var(--ac);color:var(--ac);padding:3px 7px;border-radius:5px;background:color-mix(in srgb,var(--ac) 12%,transparent);
+  }
+  .card .role{font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:.5px;margin:-4px 0 12px;text-transform:uppercase}
+  .rangep{display:flex;gap:5px;margin-bottom:13px}
+  .rangep span{flex:1;text-align:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.5px;padding:4px 0;border-radius:4px;color:var(--muted2);background:var(--bg);border:1px solid var(--line-soft)}
+  .rangep span.hot{color:var(--bg);background:var(--ac);border-color:var(--ac);font-weight:700}
+  .fire{border-top:1px solid var(--line-soft);padding-top:10px;margin-top:4px}
+  .fire:first-of-type{border-top:0;padding-top:0}
+  .fire .fl{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--ac);text-transform:uppercase;margin-bottom:3px;font-weight:600}
+  .fire .ft{font-size:13.5px;color:var(--ink);line-height:1.45}
+  .fire .ft b{font-family:var(--mono);color:#fff;background:rgba(255,255,255,.06);padding:0 4px;border-radius:3px;font-weight:600}
+
+  /* ammo legend */
+  .ammo-key{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px}
+  .ammo-key span{font-family:var(--mono);font-size:11.5px;color:var(--muted);display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);padding:5px 11px;border-radius:999px;background:var(--panel)}
+  .ammo-key .sw{width:11px;height:11px;border-radius:3px;box-shadow:0 0 8px currentColor}
+
+  /* ---- small card variant (tech / powerup) ---- */
+  .mini{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:13px}
+  .mcard{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--ac);border-radius:10px;padding:15px 16px}
+  .mcard .mh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:7px}
+  .mcard .mn{font-family:var(--mono);font-weight:700;font-size:14.5px;letter-spacing:.3px;color:var(--ink)}
+  .mcard .mt{font-family:var(--mono);font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:var(--ac);border:1px solid var(--ac);padding:2px 6px;border-radius:4px}
+  .mcard p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.5}
+  .mcard p b{color:var(--ink);font-family:var(--mono);font-size:.92em}
+
+  /* ---- mode cards ---- */
+  .modes{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:14px}
+  .mode{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:12px;padding:18px;position:relative}
+  .mode .mtag{position:absolute;top:16px;right:16px;font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted2);text-transform:uppercase}
+  .mode h4{font-family:var(--sans);font-weight:800;text-transform:uppercase;font-size:19px;margin:0 0 3px;letter-spacing:-.01em}
+  .mode .win{font-family:var(--mono);font-size:11.5px;color:var(--cyan);letter-spacing:.4px;margin-bottom:10px}
+  .mode .win::before{content:"WIN ";color:var(--cyan-dim)}
+  .mode p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.5}
+
+  /* ---- decks ---- */
+  .decks{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+  .deck{background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .deck .dhead{padding:18px 18px 16px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 14%,transparent),transparent)}
+  .deck .dname{font-family:var(--sans);font-weight:800;text-transform:uppercase;font-size:21px;letter-spacing:-.01em;margin:0}
+  .deck .did{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ac);margin-top:4px}
+  .deck .dbody{padding:16px 18px 18px}
+  .deck .drow{display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:12.5px;padding:6px 0;border-bottom:1px dashed var(--line-soft)}
+  .deck .drow:last-child{border-bottom:0}
+  .deck .drow .k{color:var(--muted)}
+  .deck .drow .v{color:var(--ink);text-align:right}
+  .deck .dplay{font-size:13.5px;color:var(--muted);line-height:1.5;margin:14px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+  .deck .dplay b{color:var(--ink)}
+
+  /* ---- constants table ---- */
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--bg2)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:520px}
+  th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line-soft)}
+  th{font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--cyan);background:var(--panel)}
+  td:first-child{font-family:var(--mono);color:var(--ink);white-space:nowrap;font-size:12.5px}
+  td{color:var(--muted)}
+  tr:last-child td{border-bottom:0}
+  td b{color:var(--ink)}
+  .tnum{font-variant-numeric:tabular-nums}
+
+  /* ---- footer ---- */
+  footer{border-top:1px solid var(--line);padding:34px 0 60px;margin-top:20px}
+  footer .fin{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  footer .fb{font-family:var(--mono);font-size:12px;color:var(--muted2);line-height:1.7}
+  footer a{color:var(--cyan);text-decoration:none}
+  footer a:hover{text-decoration:underline}
+
+  .callout{border:1px solid var(--cyan-dim);background:rgba(49,219,230,.05);border-radius:12px;padding:18px 20px;margin:26px 0 0;display:flex;gap:14px;align-items:flex-start}
+  .callout .ico{font-family:var(--mono);color:var(--cyan);font-weight:700;font-size:15px;flex:none;margin-top:1px}
+  .callout p{margin:0;font-size:14.5px;color:var(--muted)}
+  .callout p b{color:var(--ink)}
+
+  /* ---- radar / FFA ring ---- */
+  .radar{position:relative;width:100%;max-width:430px;aspect-ratio:1;margin:6px auto 4px}
+  .radar .rg{position:absolute;border:1px dashed var(--line);border-radius:50%;inset:0;opacity:.7}
+  .radar .rg.r2{inset:16%;opacity:.5}
+  .radar .rg.r3{inset:33%;opacity:.35}
+  .radar .cen{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted2);text-transform:uppercase;text-align:center;line-height:1.5}
+  .radar .cen b{color:var(--cyan);display:block;font-weight:600}
+  .radar .node{position:absolute;transform:translate(-50%,-50%);width:20%;border:1px solid var(--line);border-radius:9px;background:var(--panel);padding:8px 5px;display:flex;flex-direction:column;gap:3px;text-align:center}
+  .radar .node .nn{font-family:var(--mono);font-size:9px;letter-spacing:.5px;color:var(--muted2)}
+  .radar .node .ni{font-family:var(--mono);font-size:10px;font-weight:600;line-height:1.2}
+  .radar .node.hasp{border-color:var(--ac);box-shadow:0 0 16px color-mix(in srgb,var(--ac) 45%,transparent)}
+  .radar .blip{position:absolute;top:-10px;left:50%;transform:translateX(-50%);min-width:20px;height:20px;padding:0 3px;border-radius:10px;display:grid;place-items:center;font-size:10px;background:var(--ac);color:#08111a;border:2px solid var(--bg);font-family:var(--mono);font-weight:700;white-space:nowrap}
+
+  /* ---- avatar cards ---- */
+  .avatars{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:15px}
+  .av{background:linear-gradient(180deg,var(--panel2),var(--bg2));border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative;transition:border-color .16s,box-shadow .16s}
+  .av:hover{border-color:var(--ac);box-shadow:0 8px 26px rgba(0,0,0,.4)}
+  .av .avtop{display:flex;gap:14px;align-items:center;padding:16px 16px 15px;border-bottom:1px solid var(--line-soft);background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 16%,transparent),transparent)}
+  .av .port{width:52px;height:52px;border-radius:11px;display:grid;place-items:center;font-size:26px;background:var(--bg);border:1px solid var(--ac);box-shadow:0 0 18px color-mix(in srgb,var(--ac) 38%,transparent);flex:none}
+  .av .who .an{font-family:var(--sans);font-weight:800;text-transform:uppercase;font-size:21px;letter-spacing:-.01em;line-height:1}
+  .av .who .arch{font-family:var(--mono);font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--ac);margin-top:6px}
+  .av .avbody{padding:14px 16px 16px;display:flex;flex-direction:column;gap:11px}
+  .av .stat{font-family:var(--mono);font-size:11.5px;color:var(--muted);border-bottom:1px dashed var(--line-soft);padding-bottom:11px;letter-spacing:.2px}
+  .av .stat b{color:var(--ink)}
+  .av .line{display:flex;gap:9px;font-size:13.5px;line-height:1.45;align-items:flex-start}
+  .av .line .lb{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:1px;padding:3px 6px;border-radius:5px;flex:none;text-transform:uppercase;margin-top:1px}
+  .av .line.buff .lb{color:var(--green);border:1px solid var(--green);background:rgba(73,214,126,.1)}
+  .av .line.debuff .lb{color:var(--mag);border:1px solid var(--mag);background:rgba(255,61,132,.1)}
+  .av .line.sig .lb{color:var(--cyan);border:1px solid var(--cyan);background:rgba(49,219,230,.1)}
+  .av .line .lt{color:var(--muted)}
+  .av .line .lt b{color:var(--ink);font-family:var(--mono);font-size:.92em}
+</style>
+
+<header class="hud">
+  <div class="hud-in">
+    <div class="brand"><span class="x">XONOTIC</span><span class="a">:ARENA</span><span class="tag">v0.2 // rulebook</span></div>
+    <nav class="hud-nav">
+      <a href="#engine">engine</a>
+      <a href="#ffa">ffa</a>
+      <a href="#avatars">avatars</a>
+      <a href="#weapons">weapons</a>
+      <a href="#tech">tech</a>
+      <a href="#items">items</a>
+      <a href="#modes">modes</a>
+      <a href="#decks">decks</a>
+      <a href="#ref">ref</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:0">
+    <p class="eyebrow">bring-your-own-deck arena shooter</p>
+    <h1 class="title"><span class="l1">Xonotic</span><span class="l2">on the table</span></h1>
+    <p class="lede">A trading-card game that keeps what actually makes an arena FPS feel like one — <b>speed, stack management, weapon combos, and map control</b> — and runs every game mode on <b>one shared combat engine</b>. Pick your fighter. Build your arsenal. Never stop moving.</p>
+    <div class="hero-meta">
+      <span class="chip"><b>2–6</b> players · FFA &amp; teams</span>
+      <span class="chip"><b>10</b> avatars</span>
+      <span class="chip"><b>~40</b>-card decks</span>
+      <span class="chip"><b>16</b> weapons</span>
+      <span class="chip"><b>13</b> modes · <b>1</b> engine</span>
+    </div>
+  </section>
+
+  <!-- ENGINE -->
+  <section id="engine">
+    <div class="sec-head"><span class="sec-num">01</span><h2>The Engine</h2></div>
+    <p class="sec-sub">Xonotic runs sixteen game modes on one set of physics — movement, weapons, and item timing never change, only the win condition does. The card game copies that exactly: master these five systems once, and every mode is a four-line rules module on top of them.</p>
+
+    <div class="engine-grid">
+      <div class="pillar"><span class="kicker">Movement is king</span><h3>Momentum</h3><p>Moving builds it; standing still bleeds it. High Momentum makes you airborne — a hard target with an extra action — but you can't grab items while flying. Speed vs. control, every turn.</p></div>
+      <div class="pillar"><span class="kicker">Setup &amp; payoff</span><h3>Board Tokens</h3><p>Weapons leave state behind — blobs, in-flight rockets, armed mortars, mines. A later card cashes them in. "Play card, deal damage" becomes real combos.</p></div>
+      <div class="pillar"><span class="kicker">Risk / reward</span><h3>The Stack</h3><p>Health + armor to 200. Above 100 it rots; below 100 health regenerates. Overstacking off a Mega is a decaying asset — fight now, don't bank it.</p></div>
+      <div class="pillar"><span class="kicker">Loadout identity</span><h3>Ammo Economy</h3><p>Four ammo types. Your weapons decide your economy and your deck's whole character. The Blaster costs nothing — the one tool every deck always has.</p></div>
+      <div class="pillar"><span class="kicker">Map control</span><h3>Item Timing</h3><p>Megas and powerups sit on the Arena Row on respawn dials. Controlling when they come back up is a sub-game that decides duels on its own.</p></div>
+      <div class="pillar"><span class="kicker">Same core, new goal</span><h3>Mode Modules</h3><p>Combat is identical in every mode. A single Mode Card swaps the win condition, the team structure, and what spawns on the map. That's the whole design.</p></div>
+    </div>
+
+    <!-- Arena Row diagram -->
+    <div class="diagram">
+      <p class="dh">// The Arena Row — the "map" &amp; the range track</p>
+      <div class="arena">
+        <div class="loc base"><span class="fighter">🔵</span><span class="lname">BASE_A</span><span class="item armor">◈ Mega Armor</span></div>
+        <div class="loc"><span class="lname">FLANK</span><span class="item ammo">▪ Cells ×2</span></div>
+        <div class="loc mid"><span class="lname">MID</span><span class="item pow">✦ Strength</span></div>
+        <div class="loc"><span class="lname">FLANK</span><span class="item mega">✚ Mega Health</span></div>
+        <div class="loc base"><span class="fighter">🔴</span><span class="lname">BASE_B</span><span class="item ammo">▪ Rockets ×2</span></div>
+      </div>
+      <div class="range-scale">
+        <span>◄ you</span><span>CLOSE</span><span>MID</span><span>LONG</span><span>opp ►</span>
+      </div>
+      <p class="note">Five locations in a line. Your Fighter occupies one; <b>the gap between fighters is the range band</b> (Point-Blank → Close → Mid → Long). Move to change range, chase an item, or run a flag. Items respawn on dials — hold the spawns, hold the game.</p>
+    </div>
+
+    <!-- Meters -->
+    <div class="meters">
+      <div class="meter">
+        <h4>Stack — health + armor</h4>
+        <div class="bar"><i class="hp"></i><i class="ar"></i><i class="over"></i></div>
+        <div class="legend">
+          <span><i class="dot" style="background:var(--green)"></i><b>Health</b> starts 100</span>
+          <span><i class="dot" style="background:var(--yellow)"></i><b>Armor</b> absorbs 60%</span>
+          <span><i class="dot" style="background:repeating-linear-gradient(45deg,#fff2 0 3px,transparent 3px 6px),var(--green)"></i><b>Overstack</b> rots</span>
+        </div>
+        <p class="note">End of turn: above 100 <b>rots</b> (faster the higher); below 100 health <b>regenerates</b> (faster the lower). Cap 200.</p>
+      </div>
+      <div class="meter">
+        <h4>Momentum — 0 to 6</h4>
+        <div class="mombar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on air"></i><i class="air"></i><i></i></div>
+        <div class="legend">
+          <span><i class="dot" style="background:var(--cyan)"></i><b>Grounded</b> full damage, can grab</span>
+          <span><i class="dot" style="background:var(--mag)"></i><b>Airborne ≥4</b> −2 dmg, +1 action</span>
+        </div>
+        <p class="note">Move +1 · Jump techs +2/+3 · no move −2. Airborne = hard to hit &amp; extra action, but <b>can't pick up items</b>.</p>
+      </div>
+    </div>
+
+    <!-- Turn structure -->
+    <div style="margin-top:34px">
+      <p class="dh" style="font-family:var(--mono);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);margin:0 0 16px">// One turn — fast and lethal</p>
+      <div class="turn">
+        <div class="step"><div class="n">1</div><h4>Upkeep</h4><p>Tick item dials. Resolve Stack rot/regen. Detonate in-flight tokens — mortars arm, blobs go live, rockets can trigger.</p></div>
+        <div class="step"><div class="n">2</div><h4>Move</h4><p>Travel the row, build Momentum, grab any item you're standing on (only if grounded).</p></div>
+        <div class="step"><div class="n">3</div><h4>Fire</h4><p>Spend Momentum + ammo to play weapons. Combos resolve in the order you choose.</p></div>
+        <div class="step"><div class="n">4</div><h4>React</h4><p>Opponent may play Reaction cards during your Fire — Dodge, Air Control, Airshot punishes.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MULTIPLAYER / FFA -->
+  <section id="ffa">
+    <div class="sec-head"><span class="sec-num">02</span><h2>Multiplayer &amp; FFA</h2></div>
+    <p class="sec-sub">The two-player Arena Row is just the special case where the map is unrolled into a line. For <b>3–6 players</b> it closes into a <b>Ring</b> — and every proximity, splash, and item rule falls out of that one change. Range becomes the shortest number of steps around the loop.</p>
+
+    <div class="diagram">
+      <p class="dh">// The Ring — proximity map for 3–6 fighters</p>
+      <div class="radar">
+        <div class="rg"></div><div class="rg r2"></div><div class="rg r3"></div>
+        <div class="cen"><b>FFA RING</b>range = steps<br>around the loop</div>
+        <div class="node hasp" style="left:50%;top:9%;--ac:var(--green)"><span class="blip">🚜 idfarms</span><span class="nn">BASE_A</span><span class="ni" style="color:var(--yellow)">◈ Armor</span></div>
+        <div class="node" style="left:85%;top:30%"><span class="nn">FLANK_NE</span><span class="ni" style="color:var(--amber)">✦ Speed</span></div>
+        <div class="node hasp" style="left:85%;top:71%;--ac:var(--mag)"><span class="blip">🤖 Bingus</span><span class="nn">MID_E</span><span class="ni" style="color:var(--a-cells)">▪ Cells</span></div>
+        <div class="node" style="left:50%;top:92%"><span class="nn">BASE_B</span><span class="ni" style="color:var(--green)">✚ Mega</span></div>
+        <div class="node hasp" style="left:15%;top:71%;--ac:var(--a-none)"><span class="blip">🦎 slippery</span><span class="nn">MID_W</span><span class="ni" style="color:var(--mag)">✦ Strength</span></div>
+        <div class="node" style="left:15%;top:30%"><span class="nn">FLANK_NW</span><span class="ni" style="color:var(--a-rockets)">▪ Rockets</span></div>
+      </div>
+      <p class="note">Same range bands as the line: <b>0 steps = Point-Blank, 1 = Close, 2 = Mid, 3+ = Long</b> — measured the short way around. Spawn points sit opposite each other; items sit on the flanks and center. Use a <b>6-node ring</b> for 3–4 players, an <b>8-node ring</b> for 5–6.</p>
+    </div>
+
+    <div class="engine-grid">
+      <div class="pillar"><span class="kicker">Speed sets tempo</span><h3>Initiative</h3><p>A round = every living Fighter takes one turn. Order is by <b>highest Momentum first</b> — the fast player dictates the fight — ties broken by <em>lowest stack</em> (the underdog moves first). Reactions still let a slow player interrupt.</p></div>
+      <div class="pillar"><span class="kicker">Zone decks scale up</span><h3>Splash &amp; Targeting</h3><p>Single-target weapons pick one enemy in range. <b>Splash weapons hit every Fighter at the target location</b> — so Mortar, Electro, Hagar and Devastator get far stronger the more players crowd a lane. Knockback can shove foes into <em>each other's</em> fire.</p></div>
+      <div class="pillar"><span class="kicker">Last hit wins</span><h3>Frag Credit</h3><p>The Fighter who lands the <b>killing blow</b> scores the frag. Kill-stealing is real and intended — chipping a target to 5 and watching someone else finish them is part of the FFA texture. No assists.</p></div>
+      <div class="pillar"><span class="kicker">No snowball</span><h3>Spawn Shield</h3><p>A just-respawned Fighter returns at an open spawn with <b>base stack, half incoming damage for one turn</b>, and can't be the target of more than one attacker until they act. Kills spawn-camping before it starts.</p></div>
+      <div class="pillar"><span class="kicker">Leader control</span><h3>The Bounty</h3><p>Optional FFA rule: the current frag leader is worth <b>+1 frag</b> to whoever downs them and their item pickups are halved. Keeps a runaway leader honest without a hard rubber-band.</p></div>
+      <div class="pillar"><span class="kicker">Squads</span><h3>Teams</h3><p>For team modes, group Fighters by color. <b>Friendly fire off</b> (splash still knocks allies around, no damage); the Mode Card's win condition is shared. Turn order still runs by Momentum, interleaving the teams.</p></div>
+    </div>
+  </section>
+
+  <!-- AVATARS -->
+  <section id="avatars">
+    <div class="sec-head"><span class="sec-num">03</span><h2>Avatars</h2></div>
+    <p class="sec-sub">Your Fighter isn't a token — it's an <b>Avatar card</b> you place on the board. It marks your location and proximity, and it carries an always-on <b>buff + debuff</b> plus a limited-use <b>Signature</b>. You pick <em>who you are</em> (the avatar) separately from <em>what you carry</em> (the deck) — two identity layers that combo. This roster is modeled on one real playgroup: <b>buffs, nerfs and reputations all intact.</b></p>
+
+    <div class="callout"><span class="ico">◈</span><p><b>Draft first, reveal decks second.</b> Players lock in avatars before decks are shown, so the pick can read and counter the table — a room full of snipers makes <b>slipperysalamander</b>'s cloak look very good, and a stack of splash decks is what <b>booger</b>'s Rally is for. Buffs and nerfs are passive; the Signature is a once-per-round or once-per-game trump card. Affinity tells you the archetype an avatar wants, but any of them can pilot any deck.</p></div>
+
+    <div class="avatars" id="avatarGal" style="margin-top:26px"></div>
+  </section>
+
+  <!-- WEAPONS -->
+  <section id="weapons">
+    <div class="sec-head"><span class="sec-num">04</span><h2>The Arsenal</h2></div>
+    <p class="sec-sub">Sixteen weapon cards, each with a <b>Primary</b> and <b>Secondary</b> fire — pick the mode as you play it. The left edge and ammo chip are color-coded by ammo type: your weapon mix <em>is</em> your economy.</p>
+    <div class="ammo-key" id="ammoKey"></div>
+    <div class="gal" id="weaponGal"></div>
+  </section>
+
+  <!-- TECH -->
+  <section id="tech">
+    <div class="sec-head"><span class="sec-num">05</span><h2>Movement &amp; Tech</h2></div>
+    <p class="sec-sub">The cards that make speed a system instead of flavor. Most are free or cost Momentum; Reactions are held and played on the opponent's turn. A pure-movement deck can win Race with barely a shot fired.</p>
+    <div class="mini" id="techGal"></div>
+  </section>
+
+  <!-- ITEMS -->
+  <section id="items">
+    <div class="sec-head"><span class="sec-num">06</span><h2>Items &amp; Powerups</h2></div>
+    <p class="sec-sub">Supplied by the map (on respawn dials) or slotted into constructed decks. Powerups run for a fixed number of turns and reward the aggression the timing window demands.</p>
+    <div class="mini" id="itemGal"></div>
+  </section>
+
+  <!-- MODES -->
+  <section id="modes">
+    <div class="sec-head"><span class="sec-num">07</span><h2>Game Modes</h2></div>
+    <p class="sec-sub">Same engine, one swapped card. Each mode changes only the win condition, team structure, and what spawns — never how combat works. Race and Nexball are the proof it holds: modes where you barely shoot still play, because <em>movement</em> is a real system.</p>
+    <div class="modes" id="modeGal"></div>
+  </section>
+
+  <!-- DECKS -->
+  <section id="decks">
+    <div class="sec-head"><span class="sec-num">08</span><h2>Starter Decks</h2></div>
+    <p class="sec-sub">Three tuned archetypes to learn on. Ammo forces commitment — you can't run everything, so each deck wants a different range and a different rhythm.</p>
+    <div class="decks" id="deckGal"></div>
+    <div class="callout"><span class="ico">◈</span><p><b>Deckbuilding rule of thumb:</b> ~40 cards — about <b>10 weapons</b> sharing 1–2 ammo types, <b>~12 movement/tech</b>, <b>~8 reactions</b>, and <b>~6 powerups</b> plus a few flex slots. Limits: max 3 of any card, max 2 of any single powerup, 6 powerups total. The core weapons (Blaster, Shotgun, Machine Gun) are commons every deck may run. <b>The rulebook builds a full 40-card signature deck for each of the ten avatars.</b></p></div>
+  </section>
+
+  <!-- REFERENCE -->
+  <section id="ref">
+    <div class="sec-head"><span class="sec-num">09</span><h2>Quick Reference</h2></div>
+    <p class="sec-sub">The constants that never change, whatever mode you're playing. Keep this card face-up on the table.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>System</th><th>Rule</th></tr></thead>
+        <tbody>
+          <tr><td>Start</td><td><b>100</b> HP · <b>0</b> Armor · stack cap <b>200</b></td></tr>
+          <tr><td>Armor</td><td>Absorbs <b>60%</b> of incoming until depleted, then health takes the rest</td></tr>
+          <tr><td>Stack &gt;100</td><td><b>Rots</b> at end of turn — faster the further above 100 you are</td></tr>
+          <tr><td>Health &lt;100</td><td><b>Regenerates</b> at end of turn — faster the lower you are</td></tr>
+          <tr><td>Momentum</td><td>Range <b>0–6</b> · Move <b>+1</b> · jump tech <b>+2/+4</b> · didn't move <b>−2</b></td></tr>
+          <tr><td>Airborne ≥4</td><td><b>−2</b> incoming damage · <b>+1</b> action · <b>cannot</b> grab items/objectives</td></tr>
+          <tr><td>Actions</td><td><b>2</b> per turn · <b>+1</b> airborne · <b>+1</b> Speed · a fire or an equip = 1 · hand <b>5</b></td></tr>
+          <tr><td>Range band</td><td>Locations apart → <b>0</b> Point-Blank · <b>1</b> Close · <b>2</b> Mid · <b>3+</b> Long</td></tr>
+          <tr><td>Frag</td><td>Reduce a Fighter's stack to <b>0</b> — the <b>killing blow</b> scores it. Respawn rule set by the Mode Card</td></tr>
+          <tr><td>3+ players</td><td>Map closes into a <b>Ring</b> (6 nodes for 3–4, 8 for 5–6). Range = shortest steps around it</td></tr>
+          <tr><td>Turn order</td><td>Each round, act in order of <b>highest Momentum first</b>; ties → lowest stack goes first</td></tr>
+          <tr><td>Spawn Shield</td><td>Just respawned: base stack, <b>½ incoming</b> for one turn, max one attacker until you act</td></tr>
+          <tr><td>Avatar</td><td>Your Fighter card: marks location, carries a passive <b>buff + debuff</b> + a Signature</td></tr>
+          <tr><td>Ammo</td><td>Shells · Bullets · Rockets · Cells — Blaster costs <b>none</b></td></tr>
+          <tr><td>Megas</td><td>Mega Health / Mega Armor = <b>+100</b>, respawn <b>3 rounds</b> · Shard 1 · Ammo 2</td></tr>
+          <tr><td>Powerups</td><td>Run <b>2 turns</b>, respawn <b>6 rounds</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap fin">
+    <div class="fb"><span style="color:var(--cyan)">XONOTIC:ARENA</span> — a fan-made tabletop concept.<br>Not affiliated with the Xonotic project. Xonotic is free &amp; open-source: <a href="https://xonotic.org">xonotic.org</a></div>
+    <div class="fb"><a href="rules.html">Complete Rules ►</a> · <a href="pnp.html">Print &amp; Play ►</a><br>frag responsibly ◈ never stop moving</div>
+  </div>
+</footer>
+
+<script>
+const AMMO = {
+  none:{c:'var(--a-none)',label:'No Ammo'},
+  shells:{c:'var(--a-shells)',label:'Shells'},
+  bullets:{c:'var(--a-bullets)',label:'Bullets'},
+  rockets:{c:'var(--a-rockets)',label:'Rockets'},
+  cells:{c:'var(--a-cells)',label:'Cells'},
+};
+const BANDS=['PB','CLOSE','MID','LONG'];
+
+const WEAPONS=[
+  {n:'Blaster',a:'none',cost:'—',role:'Free staple · juggle & reposition',r:[1,1,0,0],
+   p:'<b>12</b> dmg + <b>Knockback</b> — shove opponent 1 band.',
+   s:'<b>Blaster-Jump:</b> take <b>15</b> self, +3 Momentum, leap 2 locations.'},
+  {n:'Shotgun',a:'shells',cost:'1',role:'Close-range finisher',r:[1,1,0,0],
+   p:'<b>20</b> at Point-Blank, <b>12</b> Close, <b>4</b> Mid — spread falloff.',
+   s:'<b>Melee slap</b> — <b>30</b> dmg, Point-Blank only.'},
+  {n:'Machine Gun',a:'bullets',cost:'2',role:'Steady hitscan pressure',r:[0,1,1,0],
+   p:'<b>18</b> hitscan, rapid — Close to Mid.',
+   s:'<b>Burst</b> <b>24</b> at Mid/Long; skip your next Fire.'},
+  {n:'Mortar',a:'rockets',cost:'1',role:'Corner spam · zone denial',r:[0,0,1,1],
+   p:'Lob a Mortar token → <b>30</b> splash at that location next Upkeep.',
+   s:'<b>Bounce</b> one location, then arm. <em>Triggers Electro blobs.</em>'},
+  {n:'Electro',a:'cells',cost:'1',role:'Combo engine · area denial',r:[0,0,1,0],
+   p:'<b>22</b> bolt, Mid — <em>detonates all live Blobs.</em>',
+   s:'Lay up to <b>3 Blob tokens</b> — <b>15</b> splash each on detonation.'},
+  {n:'Crylink',a:'cells',cost:'1',role:'Anti-runner control',r:[0,1,1,0],
+   p:'<b>25</b> spread + <b>pull</b> target 1 band toward you.',
+   s:'<b>Slow shot</b> — <b>15</b> dmg + strip <b>2</b> Momentum.'},
+  {n:'Vortex',a:'cells',cost:'2',role:'The duel decider',r:[0,0,1,1],
+   p:'<b>40</b> at Mid · <b>30</b> Long · <b>25</b> Close/PB, hitscan; <b>+20</b> if charged.',
+   s:'<b>Zoom</b> — your next Vortex ignores the airborne dodge.'},
+  {n:'Hagar',a:'rockets',cost:'1',role:'Wall-splash spam',r:[0,1,1,0],
+   p:'Spray <b>3×8</b>, high random spread.',
+   s:'<b>Load ×4</b>, release for <b>4×10</b> burst — self-splash risk.'},
+  {n:'Devastator',a:'rockets',cost:'2',role:'Highest splash · mobility bomb',r:[0,0,1,1],
+   p:'Fire a rocket-in-flight token; <b>remote-detonate</b> any later turn for <b>45</b>.',
+   s:'<b>Ride it</b> — 20 self, +4 Momentum, move 3, <b>30</b> splash on landing.'},
+  {n:'Rifle',a:'bullets',cost:'1',role:'Sniper · punishes campers',r:[0,0,0,1],
+   p:'<b>35</b> hitscan at Long — <b>0</b> at Point-Blank (bolt-action).',
+   s:'<b>3-round burst</b> — <b>3×12</b>, Mid/Long; reload delay.'},
+  {n:'Arc',a:'cells',cost:'2',role:'Sustained lock-on',r:[0,1,1,0],
+   p:'Beam <b>10</b> + <b>lock</b> — auto-hits the same target next turn if in range.',
+   s:'<b>Lightning burst</b> — <b>20</b>, Close.'},
+  {n:'Fireball',a:'rockets',cost:'2',role:'Explosive area burn',r:[0,0,1,0],
+   p:'<b>35</b> splash Mid + <b>burn 5</b> next Upkeep.',
+   s:'Drop a <b>Napalm zone</b> token — burns anyone who ends a turn on it.'},
+  {n:'Seeker',a:'rockets',cost:'2',role:'Guaranteed chip · anti-air',r:[1,1,1,1],
+   p:'Tag a target → homing missile <b>20</b>, <b>can\'t miss</b>, ignores range.',
+   s:'<b>Flac burst</b> — anti-air, <b>+10</b> vs airborne.'},
+  {n:'Mine Layer',a:'rockets',cost:'1',role:'Traps · area control',r:[0,0,0,0],
+   p:'Plant a <b>Mine token</b> — <b>35</b> splash when an enemy enters the location.',
+   s:'<b>Detonate all</b> your mines at once.'},
+  {n:'Vaporizer',a:'cells',cost:'3',role:'Instagib mode weapon',r:[0,0,1,1],
+   p:'<b>Instant frag</b> — hitscan, any range, if the target is grounded.',
+   s:'<b>Blaster-Jump</b> — the movement fallback in Instagib.'},
+  {n:'@!#% Tuba',a:'none',cost:'—',role:'Meme MVP · zero ammo',r:[1,0,0,0],
+   p:'<b>15</b> to <em>everyone</em> adjacent — omnidirectional.',
+   s:'Deal <b>5</b> each time you Move this turn — play a song.'},
+];
+
+const AVATARS=[
+  {n:'idfarms',arch:'The Farmer',ac:'var(--green)',port:'🚜',aff:'Blitz-bruiser · maxxes stack',
+   buff:'<b>+1 Momentum</b> per Move; while your stack is <b>75+</b>, weapon damage <b>+4</b>. Fast, heavy, and snowballs off a full stack.',
+   debuff:'Below <b>50</b> stack he takes <b>−1 Action</b> (the +4 needs 75+) — strip his cushion and he wilts.',
+   sig:'<b>Full Farm</b> · once/game · immediately set stack to <b>200</b> and refill all ammo.'},
+  {n:'Dr. Shrimp Puerto Rico',arch:'The Clutch',ac:'var(--a-cells)',port:'🦐',aff:'hitscan · high-jump survivor',
+   buff:'Hitscan <b>+3</b>; jump-techs give <b>+1</b> extra Momentum. Below 50 stack <em>or</em> outnumbered in range: <b>+1 action</b>.',
+   debuff:'Max stack <b>140</b>; while at <b>100+</b> stack his damage is <b>−3</b> — only truly dangerous when cornered.',
+   sig:'<b>Last Stand</b> · once/game · survive the next lethal hit at <b>1 stack</b>, then <b>+3 Momentum</b> to escape the odds.'},
+  {n:'slipperysalamander',arch:'The Runner',ac:'var(--a-none)',port:'🦎',aff:'ambush · pure hit-and-run',
+   buff:'<b>+2 Momentum</b> per Move; <b>Cloaked</b> on any turn you moved (untargetable beyond Close); grabs items while airborne.',
+   debuff:'Max stack <b>130</b> and takes <b>+10</b> when actually hit — he does not win straight fights.',
+   sig:'<b>Right Back Up</b> · once per <em>round</em> · if fragged, respawn on your <b>very next turn</b> with a full Spawn Shield.'},
+  {n:'mouseeyeeater',arch:'The Rookie',ac:'var(--a-rockets)',port:'🐭',aff:'wildcard · just happy to be here',
+   buff:'<b>Beginner\'s Luck</b> — your first shot each turn deals <b>+5</b>; on any frag, <b>+2 Momentum</b> and refill one ammo type.',
+   debuff:'<b>Green</b> — can\'t hold Reaction cards, and must grab the first item you touch, ready or not.',
+   sig:'<b>Happy To Be Here!</b> · once/game · for one turn all your damage is <b>maximized</b> and you gain <b>+1 action</b>.'},
+  {n:'Bingus',arch:'The Machine',ac:'var(--mag)',port:'🤖',aff:'precision turret · maxxes stack',
+   buff:'Hitscan <b>+7</b> and ignores one band of falloff; <b>spawns with +25 armor</b>, and while <b>above 100 stack</b> his hitscan <b>can\'t be dodged</b>. "Definitely not aimbotting."',
+   debuff:'<b>On rails</b> — can\'t play jump-tech cards and takes <b>−1 Momentum</b> per Move. Lethal, but a stationary target.',
+   sig:'<b>Lock-On</b> · once/round · your next hitscan shot auto-hits <b>every enemy in range</b> for full damage.'},
+  {n:'booger',arch:'The Faithful',ac:'var(--yellow)',port:'👃',aff:'support · even-keel (that\'s you)',
+   buff:'<b>Command</b> — allies within Close range get <b>+3 damage</b> and <b>+1 Momentum</b>. Solo: <b>+2</b> to whichever system you used least last turn.',
+   debuff:'<b>Leads from behind</b> — his own weapon damage is <b>−4</b>. He wins through the team, not the scoreboard.',
+   sig:'<b>Rally</b> · once/game · every ally refills ammo, clears burns &amp; debuffs and gains a Spawn Shield. Solo: full stack + <b>2 actions</b>.'},
+  {n:'kelso',arch:'The Ambusher',ac:'#3fb8a0',port:'☺️',aff:'ambush · patient sneak attacks',
+   buff:'<b>Cold Blood</b> — your first shot each turn deals <b>+8</b> against anyone who didn\'t damage you last turn; never rattled (immune to panic and close-range −Action nerfs).',
+   debuff:'<b>Green hands</b> — you may fire <b>only one weapon per turn</b> (spare Actions can still Move or equip). Make the shot count.',
+   sig:'<b>Perfect Spot</b> · once/game · at turn start, move to <b>any</b> node for free; your next attack this turn is an <b>undodgeable</b> sneak hit.'},
+  {n:'meth_invader',arch:'All-Ears',ac:'#7c9cff',port:'🎧',aff:'info · hears the whole map',
+   buff:'<b>Golden Ears</b> — enemy Invisibility and Cloak don\'t work on you, and you may play <b>Reactions against any enemy action anywhere on the map</b>, not just in range.',
+   debuff:'<b>Tuned Out</b> — the headphones stay on: you <b>can\'t receive any ally buff or heal</b> (booger\'s aura and Rally skip you). Solo, even on a team.',
+   sig:'<b>Wallhack</b> · once/game · until your next turn, every enemy hand is revealed to you and your Reactions cost <b>nothing</b>.'},
+  {n:'trashpanda',arch:'The Perch',ac:'#9fb3c8',port:'🦝',aff:'camp · long sightlines',
+   buff:'<b>Perched</b> — while you didn\'t move last turn, hitscan <b>+6</b> and you may fire from Long at <b>any</b> node on the map.',
+   debuff:'<b>Unhurried</b> — he takes his time with everything: <b>−1 Action</b> each turn, and he <b>always acts last</b> in the round no matter his Momentum. No rush, ever.',
+   sig:'<b>Overwatch</b> · once/round · call a lane; the first enemy to enter your range before your next turn takes a <b>free hitscan shot</b>.'},
+  {n:'jared',arch:'The Boomer',ac:'#b09a6a',port:'👴',aff:'meme · doesn\'t want to be here',
+   buff:'<b>Doesn\'t Care</b> — jared ignores what he doesn\'t get: <b>immune to knockback, burn, freeze, slow and every status</b>, and no one scores a Bounty on him.',
+   debuff:'<b>Boomer</b> — hand <b>3</b>, <b>−1 Action</b>, can\'t play Reactions or jump-tech, weapons <b>−3</b>. He did not ask for this.',
+   sig:'<b>Boomer Rage</b> · once/game · fed up, he actually tries: this turn <b>+2 Actions</b>, ignore his damage penalty, every shot <b>maximized</b>.'},
+];
+
+const TECH=[
+  {n:'Strafe Jump',t:'Move',d:'<b>+2</b> Momentum without spending your Move for the turn.'},
+  {n:'Bunnyhop',t:'Move',d:'If you moved this turn: <b>+1</b> extra Move and skip end-of-turn Momentum decay.'},
+  {n:'Rocket Jump',t:'Move',d:'Needs a rocket weapon in play. <b>20</b> self, <b>+4</b> Momentum, move 3 locations.'},
+  {n:'Ramp Slide',t:'Move',d:'Move <b>2</b> locations for the cost of 1, and gain <b>+1</b> Momentum.'},
+  {n:'Air Control',t:'Reaction',d:'While airborne and targeted: reduce the hit by an extra <b>3</b>.'},
+  {n:'Dodge',t:'Reaction',d:'Spend <b>2</b> Momentum: reduce one incoming hit by <b>15</b>.'},
+  {n:'Airshot',t:'Reaction',d:'When you hit an airborne foe: <b>+10</b> damage and knock <b>3</b> Momentum off them.'},
+  {n:'Camp Break',t:'Reaction',d:'When an enemy skips their Move: your next shot ignores their armor.'},
+];
+
+const ITEMS=[
+  {n:'Mega Health',t:'Item',d:'<b>+100</b> HP instantly (overstack rots). Respawn <b>3 rounds</b>.'},
+  {n:'Mega Armor',t:'Item',d:'<b>+100</b> Armor instantly. The duel-defining pickup — time the dial.'},
+  {n:'Shard',t:'Item',d:'<b>+5</b> health or armor. Small, but always grabbable even at full stack.'},
+  {n:'Strength',t:'Powerup',d:'<b>2 turns:</b> weapon damage <b>×2</b>, knockback <b>+1 band</b>. The kill window.'},
+  {n:'Shield',t:'Powerup',d:'<b>2 turns:</b> incoming damage <b>×0.33</b>, resist knockback. Stacks with armor.'},
+  {n:'Speed',t:'Powerup',d:'<b>2 turns:</b> <b>+2</b> Momentum/turn, <b>+1</b> action — but incoming <b>+25%</b>.'},
+  {n:'Invisibility',t:'Powerup',d:'<b>2 turns:</b> can\'t be targeted beyond Close range unless adjacent.'},
+  {n:'Ammo Pack',t:'Item',d:'Refill one ammo type. Contested map ammo shapes every economy deck.'},
+];
+
+const MODES=[
+  {n:'Deathmatch / FFA',tag:'2+ solo',win:'First to X frags',d:'Free-for-all, all items live. The pure engine, no objective — just outfrag the room.'},
+  {n:'Team Deathmatch',tag:'teams',win:'Team to 50 frags',d:'Squads share one frag pool; friendly fire off. FFA discipline, doubled.'},
+  {n:'Duel',tag:'1v1',win:'Frag lead at time / to X',d:'Item timing is everything. Controlling the Mega dials is the real game beneath the shooting.'},
+  {n:'Capture the Flag',tag:'teams',win:'Most caps in 10 rounds',d:'A flag token in each base. Carrying caps Momentum at 3 but grants −25% incoming (adrenaline) — catchable, not free. Blaster-knockback to stop runners. ~20–30 min.'},
+  {n:'Clan Arena',tag:'teams',win:'Last team standing',d:'No map items, spawn full stack, one life per round. Strips out the item game for pure combat.'},
+  {n:'Freeze Tag',tag:'teams',win:'Freeze the whole enemy team',d:'A frag freezes instead of kills. A teammate spends a turn adjacent to thaw. Positioning over raw damage.'},
+  {n:'Juggernaut',tag:'2+ solo',win:'Be the Jugg longest',d:'One Fighter gets a huge stack + all ammo. Frag the Jugg and you become it — a snowball everyone fights.'},
+  {n:'Domination',tag:'teams',win:'Hold points to score',d:'Locations become capturable control points that tick a point each round. Spread thin or stack up.'},
+  {n:'Onslaught',tag:'teams',win:'Break the Generator',d:'Link your control points across the row, then the enemy Generator becomes damageable. Push the line.'},
+  {n:'Nexball',tag:'teams',win:'Ball into the goal',d:'Weapon damage doesn\'t score — the Blaster passes and shoots the ball. A movement sport mode.'},
+  {n:'Assault',tag:'asym',win:'Break objective vs timer',d:'Attackers race a countdown to destroy an objective; defenders hold. Roles swap and times are compared.'},
+  {n:'Race / CTS',tag:'2+ solo',win:'Run the row X× first',d:'No combat needed. A pure Momentum deck — strafe jumps, bunnyhops, rocket jumps — wins outright.'},
+  {n:'Instagib',tag:'any',win:'One hit = one frag',d:'Everyone carries only the Vaporizer. One clean grounded hit ends it — all movement, all aim, no stack.'},
+];
+
+const DECKS=[
+  {n:'Railmaster',id:'positional · cells',ac:'var(--a-cells)',
+   rows:[['Range','Mid / Long'],['Ammo','Cells'],['Core','Vortex · Crylink · Electro'],['Tech','Strafe Jump · Dodge · Air Control'],['Wins','picks you apart from distance']],
+   play:'<b>Hold the far bands.</b> Charge Vortex behind cover, Crylink-pull anyone who closes, Electro-blob the chokes. Folds if a rusher pins you Point-Blank — Dodge and Blaster-Jump to reset range.'},
+  {n:'Blitz',id:'rushdown · bullets+shells',ac:'var(--a-shells)',
+   rows:[['Range','PB / Close'],['Ammo','Bullets + Shells'],['Core','Shotgun · Machine Gun · Blaster'],['Tech','Bunnyhop · Ramp Slide · Airshot'],['Wins','never lets them breathe']],
+   play:'<b>Close the gap and stay glued.</b> Bunnyhop into their face, Shotgun at Point-Blank, MG the retreat. Airshot punishes any escape jump. If you\'re out of Shells you\'ve already lost the tempo — keep the pressure on.'},
+  {n:'Saturation',id:'zone · rockets',ac:'var(--a-rockets)',
+   rows:[['Range','Mid'],['Ammo','Rockets'],['Core','Mortar · Hagar · Devastator · Mines'],['Tech','Rocket Jump · Camp Break'],['Wins','denies the whole map']],
+   play:'<b>Cover the board in tokens.</b> Mortar the chokes, mine the item spawns, keep a Devastator rocket in flight for the remote-detonate. Deny stack pickups and win the timer. Watch your own splash — keep one location clean to stand on.'},
+];
+
+function rangeProfile(r){
+  return `<div class="rangep">${BANDS.map((b,i)=>`<span class="${r[i]?'hot':''}">${b}</span>`).join('')}</div>`;
+}
+// ammo key
+document.getElementById('ammoKey').innerHTML = Object.values(AMMO).map(a=>
+  `<span><i class="sw" style="background:${a.c};color:${a.c}"></i>${a.label}</span>`).join('');
+
+// weapons
+document.getElementById('weaponGal').innerHTML = WEAPONS.map(w=>{
+  const a=AMMO[w.a];
+  return `<article class="card" style="--ac:${a.c}">
+    <div class="edge"></div>
+    <div class="body">
+      <div class="top">
+        <div class="wname">${w.n}</div>
+        <div class="ammo">${a.label}${w.cost!=='—'?` ×${w.cost}`:''}</div>
+      </div>
+      <div class="role">${w.role}</div>
+      ${rangeProfile(w.r)}
+      <div class="fire"><div class="fl">Primary</div><div class="ft">${w.p}</div></div>
+      <div class="fire"><div class="fl">Secondary</div><div class="ft">${w.s}</div></div>
+    </div>
+  </article>`;
+}).join('');
+
+// avatars
+document.getElementById('avatarGal').innerHTML = AVATARS.map(a=>
+  `<article class="av" style="--ac:${a.ac}">
+    <div class="avtop">
+      <div class="port">${a.port}</div>
+      <div class="who"><div class="an">${a.n}</div><div class="arch">${a.arch}</div></div>
+    </div>
+    <div class="avbody">
+      <div class="stat">AFFINITY // ${a.aff}</div>
+      <div class="line buff"><span class="lb">Buff</span><span class="lt">${a.buff}</span></div>
+      <div class="line debuff"><span class="lb">Nerf</span><span class="lt">${a.debuff}</span></div>
+      <div class="line sig"><span class="lb">Sig</span><span class="lt">${a.sig}</span></div>
+    </div>
+  </article>`).join('');
+
+// tech + items share the mini renderer
+function mini(list){
+  return list.map(c=>{
+    const ac = c.t==='Reaction' ? 'var(--mag)' : c.t==='Powerup' ? 'var(--mag)' : c.t==='Item' ? 'var(--green)' : 'var(--cyan)';
+    return `<article class="mcard" style="--ac:${ac}">
+      <div class="mh"><div class="mn">${c.n}</div><div class="mt">${c.t}</div></div>
+      <p>${c.d}</p>
+    </article>`;
+  }).join('');
+}
+document.getElementById('techGal').innerHTML = mini(TECH);
+document.getElementById('itemGal').innerHTML = mini(ITEMS);
+
+// modes
+document.getElementById('modeGal').innerHTML = MODES.map(m=>
+  `<article class="mode">
+    <span class="mtag">${m.tag}</span>
+    <h4>${m.n}</h4>
+    <div class="win">${m.win}</div>
+    <p>${m.d}</p>
+  </article>`).join('');
+
+// decks
+document.getElementById('deckGal').innerHTML = DECKS.map(d=>
+  `<article class="deck" style="--ac:${d.ac}">
+    <div class="dhead"><h3 class="dname">${d.n}</h3><div class="did">${d.id}</div></div>
+    <div class="dbody">
+      ${d.rows.map(r=>`<div class="drow"><span class="k">${r[0]}</span><span class="v">${r[1]}</span></div>`).join('')}
+      <p class="dplay">${d.play}</p>
+    </div>
+  </article>`).join('');
+</script>

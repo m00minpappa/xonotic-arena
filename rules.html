@@ -1,0 +1,464 @@
+<title>XONOTIC: ARENA — Complete Rules</title>
+<style>
+  :root{
+    --bg:#080b11;--bg2:#0c1017;--panel:#121824;--panel2:#161e2c;
+    --line:#26303f;--line-soft:#1b2431;--ink:#e8eef6;--muted:#8593a6;--muted2:#5f6d80;
+    --cyan:#31dbe6;--cyan-dim:#1a99a3;--mag:#ff3d84;--amber:#ff9e3d;--green:#49d67e;--yellow:#ffd23d;
+    --a-none:#b98bff;--a-shells:#e0a94b;--a-bullets:#9fb3c8;--a-rockets:#ff6b3d;--a-cells:#31dbe6;
+    --mono:ui-monospace,"Cascadia Code","SFMono-Regular","JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:radial-gradient(1100px 600px at 85% -10%,rgba(49,219,230,.06),transparent 60%),var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.62;font-size:15.5px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px);background-size:100% 3px;mix-blend-mode:overlay;opacity:.5}
+
+  /* top bar */
+  header.hud{position:sticky;top:0;z-index:30;background:rgba(8,11,17,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .hud-in{max-width:1220px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:baseline;gap:9px;font-family:var(--mono);font-weight:700;letter-spacing:.5px}
+  .brand .x{color:var(--cyan);text-shadow:0 0 14px rgba(49,219,230,.55)}
+  .brand .tag{color:var(--muted2);font-weight:500;font-size:12px;letter-spacing:2px;text-transform:uppercase}
+  .backlink{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:6px 11px;border-radius:7px}
+  .backlink:hover{color:var(--cyan);border-color:var(--cyan-dim)}
+
+  /* layout */
+  .shell{max-width:1220px;margin:0 auto;padding:0 22px;position:relative;z-index:1;display:grid;grid-template-columns:230px 1fr;gap:38px;align-items:start}
+  @media(max-width:920px){.shell{grid-template-columns:1fr;gap:0}}
+  nav.toc{position:sticky;top:64px;align-self:start;padding:26px 0;max-height:calc(100vh - 64px);overflow-y:auto}
+  @media(max-width:920px){nav.toc{display:none}}
+  nav.toc .tt{font-family:var(--mono);font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);margin:0 0 12px}
+  nav.toc a{display:block;font-family:var(--mono);font-size:12.5px;color:var(--muted);text-decoration:none;padding:5px 10px;border-left:2px solid var(--line-soft);letter-spacing:.2px}
+  nav.toc a:hover{color:var(--cyan);border-left-color:var(--cyan)}
+  nav.toc a .rn{color:var(--cyan-dim);margin-right:7px}
+
+  main{padding:26px 0 80px;min-width:0}
+
+  /* hero */
+  .rhero{padding:44px 0 30px;border-bottom:1px solid var(--line-soft);margin-bottom:8px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin:0 0 14px}
+  .eyebrow::before{content:">_ "}
+  h1{font-family:var(--sans);font-weight:800;font-size:clamp(34px,6vw,58px);line-height:.98;letter-spacing:-.03em;margin:0;text-transform:uppercase;text-wrap:balance}
+  h1 .sub{display:block;color:transparent;-webkit-text-stroke:1.2px var(--cyan);font-size:.5em;margin-top:10px;letter-spacing:-.01em}
+  .rhero p{color:var(--muted);max-width:66ch;margin:20px 0 0;font-size:16px}
+
+  section.rule{padding:34px 0;border-top:1px solid var(--line-soft)}
+  h2{font-family:var(--sans);font-weight:800;font-size:clamp(22px,3.4vw,30px);letter-spacing:-.02em;margin:0 0 4px;text-transform:uppercase;display:flex;align-items:baseline;gap:12px}
+  h2 .h2n{font-family:var(--mono);font-size:.5em;color:var(--cyan-dim);letter-spacing:1px;font-weight:700}
+  .lead{color:var(--muted);max-width:70ch;margin:6px 0 22px;font-size:15.5px}
+  h3.rh{font-family:var(--mono);font-size:14px;letter-spacing:.4px;text-transform:uppercase;color:var(--cyan);margin:26px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line-soft)}
+
+  /* numbered rules */
+  ol.rules{list-style:none;counter-reset:r;padding:0;margin:0;display:flex;flex-direction:column;gap:11px}
+  ol.rules>li{counter-increment:r;position:relative;padding-left:44px;font-size:15px;color:var(--ink)}
+  ol.rules>li::before{content:counter(r,decimal-leading-zero);position:absolute;left:0;top:1px;font-family:var(--mono);font-size:11px;color:var(--cyan);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:3px 6px;letter-spacing:.5px}
+  ol.rules>li b{color:#fff}
+  ol.rules>li .m{font-family:var(--mono);color:var(--cyan);font-size:.92em;background:rgba(49,219,230,.08);padding:0 5px;border-radius:4px}
+  ol.rules>li em{color:var(--muted);font-style:normal}
+  ol.rules ul{margin:8px 0 0;padding-left:2px;list-style:none;display:flex;flex-direction:column;gap:5px}
+  ol.rules ul li{color:var(--muted);font-size:14px;padding-left:16px;position:relative}
+  ol.rules ul li::before{content:"›";position:absolute;left:0;color:var(--cyan-dim)}
+
+  /* callouts */
+  .box{border:1px solid var(--line);border-radius:11px;padding:16px 18px;margin:20px 0;background:var(--bg2)}
+  .box.ex{border-color:var(--cyan-dim);background:rgba(49,219,230,.045)}
+  .box.warn{border-color:#8a5a2a;background:rgba(255,158,61,.05)}
+  .box .bt{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin:0 0 9px}
+  .box.warn .bt{color:var(--amber)}
+  .box p{margin:0 0 8px}.box p:last-child{margin:0}
+  .box .step{font-family:var(--mono);font-size:13px;color:var(--muted);line-height:1.7}
+  .box .step b{color:var(--ink)}
+  .box .step .r{color:var(--mag)}
+  .box .step .g{color:var(--green)}
+
+  /* tables */
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:11px;background:var(--bg2);margin:16px 0}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:520px}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line-soft)}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--cyan);background:var(--panel);position:sticky;top:0}
+  td:first-child{font-family:var(--mono);color:var(--ink);font-size:12.5px;white-space:nowrap}
+  td{color:var(--muted);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  td b{color:var(--ink)}
+  .tnum{font-variant-numeric:tabular-nums}
+  .stars{color:var(--cyan);letter-spacing:1px;font-size:12px}
+  .stars .o{color:var(--line)}
+  .amchip{font-family:var(--mono);font-size:10px;padding:2px 6px;border-radius:4px;border:1px solid currentColor}
+
+  /* decks */
+  .decks{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;margin-top:8px}
+  .deck{background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .deck .dh{padding:15px 17px 14px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 15%,transparent),transparent);display:flex;gap:12px;align-items:center}
+  .deck .dport{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;font-size:22px;background:var(--bg);border:1px solid var(--ac);flex:none;box-shadow:0 0 14px color-mix(in srgb,var(--ac) 35%,transparent)}
+  .deck .dnm{font-family:var(--sans);font-weight:800;text-transform:uppercase;font-size:18px;letter-spacing:-.01em;line-height:1}
+  .deck .dwho{font-family:var(--mono);font-size:11px;color:var(--ac);letter-spacing:.5px;margin-top:4px}
+  .deck .dbody{padding:14px 17px 16px}
+  .deck .dmeta{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line-soft);padding-bottom:10px}
+  .deck .dmeta b{color:var(--ink)}
+  .deck .cat{font-family:var(--mono);font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted2);margin:11px 0 5px}
+  .deck .crow{display:flex;gap:8px;font-size:13px;padding:2px 0;align-items:baseline}
+  .deck .crow .ct{font-family:var(--mono);color:var(--ac);font-size:12px;min-width:24px;font-weight:600}
+  .deck .crow .cn{color:var(--ink)}
+  .deck .pilot{font-size:13px;color:var(--muted);line-height:1.5;margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line)}
+  .deck .pilot b{color:var(--ink)}
+
+  /* modes */
+  .modes{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+  .mode{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:12px;padding:17px}
+  .mode h4{font-family:var(--sans);font-weight:800;text-transform:uppercase;font-size:17px;margin:0 0 3px;letter-spacing:-.01em}
+  .mode .tags{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:1px;text-transform:uppercase;margin-bottom:9px}
+  .mode .win{font-family:var(--mono);font-size:12px;color:var(--cyan);margin-bottom:9px}
+  .mode .win b{color:var(--ink)}
+  .mode ul{margin:0;padding-left:15px;color:var(--muted);font-size:13px;line-height:1.5}
+  .mode ul li{margin-bottom:3px}
+
+  footer{border-top:1px solid var(--line);margin-top:30px;padding:26px 0 60px;font-family:var(--mono);font-size:12px;color:var(--muted2);line-height:1.7}
+  footer a{color:var(--cyan);text-decoration:none}
+  .kbd{font-family:var(--mono);font-size:.9em;background:var(--panel);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;color:var(--ink)}
+  a:focus-visible,.backlink:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+</style>
+
+<header class="hud">
+  <div class="hud-in">
+    <div class="brand"><span class="x">XONOTIC:ARENA</span><span class="tag">complete rules · v0.2</span></div>
+    <a class="backlink" href="index.html">◄ card gallery</a>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="toc">
+    <p class="tt">// Rulebook</p>
+    <a href="#setup"><span class="rn">01</span>Setup</a>
+    <a href="#turn"><span class="rn">02</span>The Turn</a>
+    <a href="#move"><span class="rn">03</span>Movement</a>
+    <a href="#combat"><span class="rn">04</span>Combat &amp; Damage</a>
+    <a href="#ammo"><span class="rn">05</span>Weapons &amp; Ammo</a>
+    <a href="#stack"><span class="rn">06</span>Stack &amp; Respawn</a>
+    <a href="#items"><span class="rn">07</span>Items &amp; Powerups</a>
+    <a href="#ffa"><span class="rn">08</span>Multiplayer</a>
+    <a href="#avatars"><span class="rn">09</span>Avatars</a>
+    <a href="#build"><span class="rn">10</span>Deckbuilding</a>
+    <a href="#decks"><span class="rn">11</span>Signature Decks</a>
+    <a href="#modes"><span class="rn">12</span>Game Modes</a>
+    <a href="#ref"><span class="rn">13</span>Quick Reference</a>
+  </nav>
+
+  <main>
+    <div class="rhero">
+      <p class="eyebrow">the manual</p>
+      <h1>Complete Rules<span class="sub">everything you need to put it on the table</span></h1>
+      <p>The full engine, tuned and internally consistent — every number below agrees with every other. If you only want the pitch and the card art, that lives in the <a href="index.html" style="color:var(--cyan)">card gallery</a>. This is the rulebook you keep on the table.</p>
+      <div class="box ex" style="margin:20px 0 0"><p class="bt">// Balance — playtested v0.2</p><p style="margin:0;color:var(--muted)">Tuned across a 40-game simulation pass. Changes from v0.1: <b>Vortex</b> full damage only at Mid (25 Close/PB · 30 Long) — no more safe-sniping; <b>idfarms</b> gets +4 from <b>75+</b> stack with the Action penalty below 50; <b>Bingus</b> spawns with <b>+25 armor</b>; <b>Shrimp</b> hitscan <b>+3</b> (and −3 while ≥100 stack); flag <b>carriers</b> take <b>−25%</b> damage; <b>CTF</b> is a <b>10-round</b> match (~20–30 min).</p></div>
+    </div>
+
+    <!-- 01 SETUP -->
+    <section class="rule" id="setup">
+      <h2><span class="h2n">01</span>Setup</h2>
+      <p class="lead">Two to six players, free-for-all or in teams. Each player brings one Avatar and one 40-card deck.</p>
+      <ol class="rules">
+        <li>Each player picks an <b>Avatar card</b> and a <b>40-card deck</b> (see §10). In a rated match, players <b>lock Avatars before decks are revealed</b> so the pick can answer the table.</li>
+        <li>Lay out the <b>map</b>: the 5-location <b>Arena Row</b> for a duel, or the <b>Ring</b> (6 nodes for 3–4 players, 8 for 5–6) for multiplayer — see §08. Seed items onto the map per the Mode Card (§12).</li>
+        <li>Each Fighter starts with: <span class="m">100 HP · 0 Armor</span>, <span class="m">Momentum 0</span>, the <b>Blaster equipped for free</b>, and starting ammo <span class="m">Shells 8 · Bullets 20 · Rockets 8 · Cells 12</span>.</li>
+        <li>Shuffle your deck, draw a <b>hand of 5</b>. Place your Avatar at your spawn location.</li>
+        <li>Determine first turn: lowest total starting stack, else a coin flip. Thereafter turn order is set by <b>Momentum</b> each round (§08).</li>
+      </ol>
+    </section>
+
+    <!-- 02 TURN -->
+    <section class="rule" id="turn">
+      <h2><span class="h2n">02</span>Anatomy of a Turn</h2>
+      <p class="lead">A turn has four phases in strict order. You have <b>2 Actions</b> per turn (a fire or an equip costs 1). Airborne and the Speed powerup each grant <span class="m">+1 Action</span>.</p>
+      <ol class="rules">
+        <li><b>Upkeep.</b> Resolve, in this order:
+          <ul>
+            <li>Detonate <b>board tokens you own</b> that trigger now — armed Mortars, burn ticks, Fireball napalm. You may choose to trigger a held Devastator rocket or leave it in flight.</li>
+            <li>Apply <b>Stack decay / regen</b> (§06) and tick any <b>powerup timers</b> you carry.</li>
+            <li><em>Once per round</em> (on the first player's upkeep), tick every <b>item respawn dial</b> down by 1.</li>
+          </ul>
+        </li>
+        <li><b>Move phase.</b> Take up to one <b>Move</b> (some tech grants extra). Moving 1 location = <span class="m">+1 Momentum</span>. You may <b>equip</b> weapons from hand here (1 Action each) and <b>grab</b> an item you end on — only if <b>grounded</b> (Momentum ≤ 3).</li>
+        <li><b>Fire phase.</b> Spend Actions to fire equipped weapons (ammo cost applies) and play tactic cards. Combos and detonations resolve in the order <b>you</b> choose.</li>
+        <li><b>End phase.</b> If you did <b>not</b> Move this turn, <span class="m">−2 Momentum</span>. Then draw back up to <b>5 cards</b>. If your deck is empty, shuffle your discard into a new deck. Pass to the next player.</li>
+      </ol>
+      <div class="box"><p class="bt">// Reactions are off-turn</p><p style="margin:0;color:var(--muted)">Reaction cards (Dodge, Air Control, Airshot, Camp Break) are held and played during an <b>opponent's</b> turn in response to their trigger. They do <b>not</b> cost your Actions. One Reaction per trigger unless the card says otherwise.</p></div>
+    </section>
+
+    <!-- 03 MOVEMENT -->
+    <section class="rule" id="move">
+      <h2><span class="h2n">03</span>Movement &amp; Momentum</h2>
+      <p class="lead">Momentum is the whole game. It runs <b>0–6</b>, and standing still bleeds it away.</p>
+      <ol class="rules">
+        <li>Each location moved in your Move phase grants <span class="m">+1 Momentum</span>. <b>Jump-tech</b> cards (Strafe Jump, Bunnyhop, Rocket Jump) add more and may extend how far you move.</li>
+        <li>At <span class="m">Momentum ≥ 4</span> you are <b>Airborne</b>: <span class="m">+1 Action</span>, all incoming damage <span class="m">−2</span> (after armor), and you <b>ignore ground traps</b> (Mines). But you <b>cannot grab items or objectives</b>, and hitscan can still hit you unless you Dodge.</li>
+        <li>At <span class="m">Momentum ≤ 3</span> you are <b>Grounded</b>: full damage, but you may grab items and interact with objectives.</li>
+        <li><b>Decay:</b> if you don't Move on your turn, lose <span class="m">2 Momentum</span> in the End phase. <b>Bunnyhop</b> cancels this decay. You cannot remain Airborne without moving.</li>
+        <li><b>Knockback</b> shoves a target a number of range-bands directly away from the attacker. Being shoved does <b>not</b> grant Momentum. Shield halves knockback; Strength adds +1 band to yours.</li>
+      </ol>
+    </section>
+
+    <!-- 04 COMBAT -->
+    <section class="rule" id="combat">
+      <h2><span class="h2n">04</span>Combat &amp; Damage</h2>
+      <p class="lead">Resolve one hit at a time. Modifiers first, then armor, then the airborne reduction.</p>
+      <ol class="rules">
+        <li>Start with the weapon's <b>base damage</b> at the current <b>range band</b> (0 steps = Point-Blank, 1 = Close, 2 = Mid, 3+ = Long). Out-of-range = no effect.</li>
+        <li>Apply <b>damage modifiers</b> in order: attacker's <b>Strength</b> (×2) and Avatar bonuses, then defender's <b>Shield</b> (×⅓) and <b>Speed</b> (×1.25 taken), then defender Avatar effects. <b>Round down</b> after each step.</li>
+        <li><b>Armor split:</b> armor absorbs <span class="m">60%</span> of the remaining damage — <span class="m">absorbed = min(Armor, ⌊0.6 × D⌋)</span>. Reduce Armor by that; the rest hits Health. If Armor can't cover its share, it takes what it can and Health eats the overflow.</li>
+        <li>If the defender is <b>Airborne</b>, subtract a final <span class="m">2</span> from the Health loss (minimum 0).</li>
+        <li>A Fighter reduced to <span class="m">0 stack</span> is <b>fragged</b>. In multiplayer the <b>killing blow</b> scores the frag (§08). Respawn follows the Mode Card.</li>
+      </ol>
+      <div class="box ex"><p class="bt">// Worked example — Bingus rails slippery</p>
+        <p class="step"><b>Bingus</b> (Vortex, +7 hitscan buff, stack 120 → above 100) fires at <b>slipperysalamander</b> (Armor 40 · Health 90 · grounded) <b>from Mid range</b> (Vortex's full-damage band).<br>
+        › Vortex base <b>40</b>, charged <span class="g">+20</span> = 60, Bingus <span class="g">+7</span> = 67. slippery's nerf adds <span class="r">+10 taken</span> → <b>77</b>.<br>
+        › Armor absorbs ⌊0.6×77⌋ = 46, but Armor is only <b>40</b> → absorbs 40 (Armor → 0). Overflow <b>37</b> hits Health: 90 → <b>53</b>.<br>
+        › Bingus is above 100 stack, so his hitscan <b>can't be Dodged</b>. slippery survives at <span class="g">53 / 0</span> — and banks his <b>Right Back Up</b> for when it matters.</p></div>
+    </section>
+
+    <!-- 05 WEAPONS/AMMO -->
+    <section class="rule" id="ammo">
+      <h2><span class="h2n">05</span>Weapons, Ammo &amp; Combos</h2>
+      <p class="lead">Your weapons are equipment: pick one up once, then use it all game — ammo is the only limit.</p>
+      <ol class="rules">
+        <li><b>Equipping:</b> playing a weapon from hand costs <b>1 Action</b> and moves it to your <b>Arsenal</b>, face-up, where it stays for the game. The Blaster is equipped free at start.</li>
+        <li><b>Firing:</b> costs <b>1 Action</b> + the weapon's printed ammo. You may fire the same weapon twice in a turn if you have the Actions and ammo. Duplicate weapon copies in hand are spare draws — a second copy is redundant once equipped, so treat it as a discard-for-tempo.</li>
+        <li><b>Ammo pools</b> (per type) start at <span class="m">Shells 8 · Bullets 20 · Rockets 8 · Cells 12</span> and cap at <b>double</b> the start. An Ammo Pack or map pickup refills <b>one</b> type by its starting amount, up to cap.</li>
+        <li><b>Board tokens</b> — Blobs, armed Mortars, Mines, in-flight Devastator rockets, Napalm — sit on the map until they trigger. A detonation source (Electro primary, Mortar) pops <b>all</b> Blobs at that location at once.</li>
+        <li><b>Reactions</b> interrupt an opponent's fire (see §02). <b>Airshot</b> only triggers against an Airborne target; <b>Camp Break</b> only against a Fighter who skipped their Move.</li>
+      </ol>
+      <div class="box"><p class="bt">// Ammo cost per fire</p><p class="step" style="margin:0">Blaster <b>0</b> · Shotgun <b>1 shell</b> · Machine Gun <b>2 bullets</b> · Rifle <b>1 bullet</b> · Mortar / Hagar / Mine Layer <b>1 rocket</b> · Devastator / Fireball / Seeker <b>2 rockets</b> · Electro / Crylink <b>1 cell</b> · Vortex / Arc <b>2 cells</b> · Vaporizer <b>3 cells</b> · Tuba <b>0</b>.</p></div>
+    </section>
+
+    <!-- 06 STACK -->
+    <section class="rule" id="stack">
+      <h2><span class="h2n">06</span>The Stack &amp; Respawn</h2>
+      <p class="lead">Health + Armor, capped at 200 combined. The overstack rots; a low stack heals. This tension is the resource game.</p>
+      <ol class="rules">
+        <li>Health starts 100, Armor 0. <b>Health pickups</b> raise Health, <b>Armor pickups</b> raise Armor; neither type alone exceeds 200, and combined stack caps at <b>200</b>.</li>
+        <li><b>Decay (Upkeep):</b> any stack <b>above 100</b> loses points — <span class="m">1</span> per full 25 over 100 (so 150 → −2, 200 → −4). Health rots before Armor.</li>
+        <li><b>Regen (Upkeep):</b> if Health is <b>below 100</b> and you took no damage last turn, regain <span class="m">10</span> (below 50, regain 15). Armor never regenerates — only pickups restore it.</li>
+        <li><b>Respawn (default):</b> a fragged Fighter returns on their next turn at an open spawn with <b>base stack 100 / 0</b>, <b>starting ammo</b>, and <b>Spawn Shield</b> (§08). You <b>keep your equipped Arsenal</b> — but lose all board tokens and powerups. Modes may override (Clan Arena, Instagib).</li>
+      </ol>
+      <div class="box warn"><p class="bt">// Why you don't just camp the Mega</p><p style="margin:0;color:var(--muted)">A 200 stack bleeds 4 per turn and can't be topped up until it drops — so a Mega is fuel for a <b>push now</b>, not a wall to hide behind. Grab it on the way into a fight, not to sit on.</p></div>
+    </section>
+
+    <!-- 07 ITEMS -->
+    <section class="rule" id="items">
+      <h2><span class="h2n">07</span>Items, Powerups &amp; Map Control</h2>
+      <p class="lead">Items sit on the map on respawn dials. Owning the clock on them is a whole layer of play.</p>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Item</th><th>Effect</th><th>Respawn</th></tr></thead>
+        <tbody>
+          <tr><td>Mega Health / Armor</td><td><b>+100</b> to that track (overstack rots)</td><td>3 rounds</td></tr>
+          <tr><td>Shard</td><td><b>+5</b> health or armor — grabbable even at full</td><td>1 round</td></tr>
+          <tr><td>Ammo Pack</td><td>Refill one ammo type by its start amount</td><td>2 rounds</td></tr>
+          <tr><td>Strength</td><td><b>2 turns:</b> weapon damage ×2, knockback +1 band</td><td>6 rounds</td></tr>
+          <tr><td>Shield</td><td><b>2 turns:</b> incoming ×⅓, knockback halved</td><td>6 rounds</td></tr>
+          <tr><td>Speed</td><td><b>2 turns:</b> +2 Momentum/turn, +1 Action, incoming ×1.25</td><td>6 rounds</td></tr>
+          <tr><td>Invisibility</td><td><b>2 turns:</b> can't be targeted from beyond Close</td><td>6 rounds</td></tr>
+        </tbody>
+      </table></div>
+      <ol class="rules">
+        <li>You grab an item by ending your Move on its location while <b>grounded</b>, if its dial reads ready. Then set its dial to the respawn value.</li>
+        <li>A Fighter may hold <b>one powerup at a time</b>; grabbing a second is not allowed until the first expires. Re-touching the same powerup <b>refreshes</b> its timer.</li>
+        <li>Powerup timers count down on <b>your</b> Upkeeps (2 of your turns), so a Speed player burns their window faster than they gain turns — spend it.</li>
+      </ol>
+    </section>
+
+    <!-- 08 MULTIPLAYER -->
+    <section class="rule" id="ffa">
+      <h2><span class="h2n">08</span>Multiplayer &amp; FFA</h2>
+      <p class="lead">The two-player Row is a Ring unrolled. Close it into a loop and every proximity rule still holds.</p>
+      <ol class="rules">
+        <li><b>The Ring:</b> locations form a loop (6 nodes for 3–4, 8 for 5–6). <b>Range = the shortest number of steps</b> around the loop between two Fighters. Spawns sit opposite; items on flanks and center.</li>
+        <li><b>Initiative:</b> each round, players act in order of <b>highest Momentum first</b>; ties broken by <b>lowest stack</b> (the underdog moves first), then by previous order. Recompute at the start of every round.</li>
+        <li><b>Splash &amp; targeting:</b> single-target weapons hit one Fighter in range; <b>splash weapons hit every Fighter at the target location</b>. Knockback can shove a foe into another player's range.</li>
+        <li><b>Frag credit:</b> the <b>killing blow</b> scores. Kill-stealing is legal and intended. No assists.</li>
+        <li><b>Spawn Shield:</b> a just-respawned Fighter has <b>½ incoming damage for one turn</b> and can be the target of <b>at most one</b> attacker until they act. Kills spawn-camping.</li>
+        <li><b>Bounty (optional FFA):</b> the current frag leader is worth <b>+1 frag</b> to whoever downs them, and their item pickups are halved — a soft check on a runaway lead.</li>
+        <li><b>Teams:</b> group by color, <b>friendly fire off</b> (ally splash still knocks, no damage). The Mode win condition is shared; initiative still interleaves both teams by Momentum.</li>
+      </ol>
+    </section>
+
+    <!-- 09 AVATARS -->
+    <section class="rule" id="avatars">
+      <h2><span class="h2n">09</span>Avatars — exact effects</h2>
+      <p class="lead">Your Fighter is an Avatar card: it marks your location and carries a passive buff, a passive nerf, and a limited-use Signature. Ten ship in the box, modeled on one real crew.</p>
+      <div class="box"><p class="bt">// Two rulings that matter</p><p class="step" style="margin:0"><b>Jump-tech</b> = Strafe Jump, Bunnyhop, Rocket Jump (Bingus can't play these; Ramp Slide is a slide, allowed). <br><b>Outnumbered in range</b> (Dr. Shrimp) = 2+ enemies within his firing weapon's range band.</p></div>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Avatar</th><th>Buff</th><th>Nerf</th><th>Signature</th></tr></thead>
+        <tbody>
+          <tr><td>🚜 idfarms<br><span style="color:var(--muted2)">The Farmer</span></td><td>+1 Momentum/Move; while stack <b>≥75</b>, damage <b>+4</b></td><td>Below <b>50</b> stack: <b>−1 Action</b> (bonus needs 75+)</td><td><b>Full Farm</b> · 1×/game · set stack to 200, refill all ammo</td></tr>
+          <tr><td>🦐 Dr. Shrimp PR<br><span style="color:var(--muted2)">The Clutch</span></td><td>Hitscan <b>+3</b>; jump-tech +1 Momentum; low/outnumbered <b>+1 Action</b></td><td>Max stack <b>140</b>; while <b>≥100</b> stack, damage −3</td><td><b>Last Stand</b> · 1×/game · survive a lethal hit at 1 stack, +3 Momentum</td></tr>
+          <tr><td>🦎 slippery<br><span style="color:var(--muted2)">The Runner</span></td><td>+2 Momentum/Move; Cloaked when you moved; grabs while airborne</td><td>Max stack <b>130</b>; takes <b>+10</b> when hit</td><td><b>Right Back Up</b> · 1×/<b>round</b> · respawn next turn with Spawn Shield</td></tr>
+          <tr><td>🐭 mouseeyeeater<br><span style="color:var(--muted2)">The Rookie</span></td><td>First shot each turn +5; on a frag, +2 Momentum + refill an ammo</td><td><b>Can't hold Reactions</b>; must grab the first item touched</td><td><b>Happy To Be Here!</b> · 1×/game · one turn of max damage + Action</td></tr>
+          <tr><td>🤖 Bingus<br><span style="color:var(--muted2)">The Machine</span></td><td>Hitscan +7, ignores 1 band; <b>+25 spawn armor</b>; &gt;100 stack → hitscan can't be Dodged</td><td><b>No jump-tech</b>; −1 Momentum/Move (a turret)</td><td><b>Lock-On</b> · 1×/round · next hitscan auto-hits all in range</td></tr>
+          <tr><td>👃 booger<br><span style="color:var(--muted2)">The Faithful</span></td><td>Allies within Close: +3 damage, +1 Momentum. Solo: +2 to least-used system</td><td>Own weapon damage <b>−4</b> (leads from behind)</td><td><b>Rally</b> · 1×/game · team refuels, clears debuffs, gains Spawn Shield</td></tr>
+          <tr><td>☺️ kelso<br><span style="color:var(--muted2)">The Ambusher</span></td><td>First shot <b>+8</b> vs anyone who didn't damage you last turn; immune to panic</td><td>Fires <b>only one weapon per turn</b></td><td><b>Perfect Spot</b> · 1×/game · free move to any node + an undodgeable sneak hit</td></tr>
+          <tr><td>🎧 meth_invader<br><span style="color:var(--muted2)">All-Ears</span></td><td>Ignores enemy Cloak/Invis; may Reaction to <b>any</b> action anywhere on the map</td><td><b>Tuned Out</b> — can't receive any ally buff or heal</td><td><b>Wallhack</b> · 1×/game · reveal all enemy hands + free Reactions till your next turn</td></tr>
+          <tr><td>🦝 trashpanda<br><span style="color:var(--muted2)">The Perch</span></td><td>Didn't move last turn: hitscan <b>+6</b>, may fire Long at any node</td><td><b>Unhurried</b> — <b>−1 Action</b>/turn and <b>always acts last</b> in the round</td><td><b>Overwatch</b> · 1×/round · first enemy into your lane takes a free hitscan shot</td></tr>
+          <tr><td>👴 jared<br><span style="color:var(--muted2)">The Boomer</span></td><td>Immune to knockback &amp; all status; can't be Bountied</td><td><b>Boomer</b> — hand 3, −1 Action, no Reactions/jump-tech, weapons −3</td><td><b>Boomer Rage</b> · 1×/game · +2 Actions, ignore damage penalty, shots maximized</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <!-- 10 DECKBUILDING -->
+    <section class="rule" id="build">
+      <h2><span class="h2n">10</span>Deckbuilding &amp; Costing</h2>
+      <p class="lead">Constructed play: build a 40-card deck around an Avatar and an ammo identity.</p>
+      <ol class="rules">
+        <li>A deck is <b>exactly 40 cards</b>, <b>max 3 copies</b> of any card, <b>max 2 copies</b> of any Powerup (Strength/Shield/Speed/Invisibility), and <b>at most 6 Powerup cards</b> total. Megas, Shards and Ammo Packs are ordinary cards (≤3 each). The Blaster is auto-equipped and not part of the 40.</li>
+        <li>Weapons drive your <b>ammo economy</b> — a deck should commit to <b>1–2 ammo types</b>. Splitting four ways starves everything.</li>
+        <li>Suggested curve: <b>~10 weapons · ~12 movement/tech · ~8 reactions · ~6 powerups/items · ~4 flex</b>. Adjust to your Avatar (Bingus runs almost no movement; mouseeyeeater runs zero reactions).</li>
+      </ol>
+      <h3 class="rh">The costing framework — five axes</h3>
+      <p class="lead" style="margin-top:0">Every weapon is balanced across five knobs; push one up, another must come down. Baseline ideal-range threat ≈ <span class="m">(ammo cost × 12) + 8</span>, then ±20% per axis.</p>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Weapon</th><th>Ammo</th><th>Threat</th><th>Range</th><th>Ammo-eff</th><th>Reliab.</th><th>Utility</th></tr></thead>
+        <tbody id="balBody"></tbody>
+      </table></div>
+      <p class="lead" style="margin-top:14px">Read it as trade-offs: <b>Vortex</b> buys top Threat + Reliability by being cell-hungry and utility-light; <b>Mine Layer</b> and <b>Seeker</b> pay for guaranteed area/hit with terrible ammo-efficiency; <b>Blaster</b> is all Utility and costs nothing because its damage is a rounding error.</p>
+    </section>
+
+    <!-- 11 DECKS -->
+    <section class="rule" id="decks">
+      <h2><span class="h2n">11</span>The Ten Signature Decks</h2>
+      <p class="lead">One ready-to-sleeve 40-card deck per teammate, tuned to their Avatar. Each obeys the deckbuilding rules above — including the ones that hurt: mouseeyeeater runs <b>zero Reactions</b>, Bingus and trashpanda run almost <b>no movement</b>, and jared runs <b>neither Reactions nor jump-tech</b>, so his deck is all guns and stack.</p>
+      <div class="decks" id="deckGal"></div>
+    </section>
+
+    <!-- 12 MODES -->
+    <section class="rule" id="modes">
+      <h2><span class="h2n">12</span>Game Modes</h2>
+      <p class="lead">One engine, one swapped Mode Card. Each entry gives the win number and the rules that differ from the core.</p>
+      <div class="modes" id="modeGal"></div>
+    </section>
+
+    <!-- 13 REF -->
+    <section class="rule" id="ref">
+      <h2><span class="h2n">13</span>Quick Reference</h2>
+      <div class="tblwrap"><table>
+        <tbody>
+          <tr><td>Start</td><td><b>100 HP / 0 Armor</b> · cap 200 · Momentum 0 · <b>2 Actions</b>/turn · hand 5 · Blaster equipped</td></tr>
+          <tr><td>Start ammo</td><td>Shells <b>8</b> · Bullets <b>20</b> · Rockets <b>8</b> · Cells <b>12</b> (cap = ×2)</td></tr>
+          <tr><td>Range</td><td>steps apart → <b>0</b> Point-Blank · <b>1</b> Close · <b>2</b> Mid · <b>3+</b> Long</td></tr>
+          <tr><td>Armor</td><td>absorbs <b>⌊0.6 × D⌋</b>, capped at current Armor; rest hits Health</td></tr>
+          <tr><td>Airborne</td><td>Momentum ≥ 4 → <b>+1 Action, −2 incoming, no pickups</b></td></tr>
+          <tr><td>Decay/Regen</td><td>&gt;100: −1 per 25 over · Health &lt;100 &amp; unhit: +10 (+15 under 50)</td></tr>
+          <tr><td>Turn order</td><td>each round: <b>highest Momentum first</b>, ties → lowest stack</td></tr>
+          <tr><td>Deck</td><td><b>40</b> cards · ≤3 per card · ≤2 per powerup · ≤6 powerups total</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <footer>
+      <span style="color:var(--cyan)">XONOTIC:ARENA</span> — complete rules, playtested v0.2. A fan-made tabletop concept, not affiliated with the Xonotic project (<a href="https://xonotic.org">xonotic.org</a>, free &amp; open-source).<br>
+      Companions: <a href="index.html">card gallery ◄</a> · <a href="pnp.html">print &amp; play ►</a> · frag responsibly ◈ never stop moving
+    </footer>
+  </main>
+</div>
+
+<script>
+const B='var(--a-bullets)',S='var(--a-shells)',R='var(--a-rockets)',C='var(--a-cells)',N='var(--a-none)';
+function st(v){let s='';for(let i=1;i<=5;i++)s+=i<=v?'★':'<span class="o">★</span>';return s;}
+const BAL=[
+  ['Blaster',N,'None',1,2,5,3,5],['Shotgun',S,'Shells',4,2,3,3,2],['Machine Gun',B,'Bullets',3,3,4,4,2],
+  ['Mortar',R,'Rockets',3,3,3,2,4],['Electro',C,'Cells',3,2,3,2,4],['Crylink',C,'Cells',3,3,3,2,4],
+  ['Vortex',C,'Cells',4,3,2,5,2],['Hagar',R,'Rockets',3,3,3,2,2],['Devastator',R,'Rockets',5,3,2,3,4],
+  ['Rifle',B,'Bullets',4,3,4,5,1],['Arc',C,'Cells',3,3,2,4,3],['Fireball',R,'Rockets',4,2,2,3,4],
+  ['Seeker',R,'Rockets',3,5,2,5,3],['Mine Layer',R,'Rockets',3,1,3,2,5],['Vaporizer',C,'Cells',5,4,1,4,1],['@!#% Tuba',N,'None',2,1,5,2,3],
+];
+document.getElementById('balBody').innerHTML = BAL.map(w=>
+  `<tr><td>${w[0]}</td><td><span class="amchip" style="color:${w[1]}">${w[2]}</span></td>`+
+  [3,4,5,6,7].map(i=>`<td><span class="stars">${st(w[i])}</span></td>`).join('')+`</tr>`).join('');
+
+const DECKS=[
+ {n:'Overstack',who:'idfarms · The Farmer',port:'🚜',ac:'var(--green)',ammo:'Shells · Rockets',plan:'brawl mid, snowball off a full stack',
+  cats:[['Weapons',[[3,'Shotgun'],[3,'Machine Gun'],[2,'Mortar'],[2,'Hagar'],[1,'Devastator']]],
+        ['Movement',[[3,'Bunnyhop'],[3,'Ramp Slide'],[2,'Strafe Jump'],[2,'Rocket Jump']]],
+        ['Reactions',[[3,'Airshot'],[2,'Dodge'],[2,'Air Control']]],
+        ['Field items',[[3,'Mega Health'],[2,'Mega Armor'],[3,'Shard'],[2,'Strength'],[2,'Ammo Pack']]]],
+  pilot:'Grab every scrap of stack, live above 100, and cash the +4 damage into a Shotgun/Mortar brawl at Mid. <b>Full Farm</b> before a fight you must win. Never let your stack drop under 100 with a fight pending.'},
+ {n:'Last Stand',who:'Dr. Shrimp PR · The Clutch',port:'🦐',ac:'var(--a-cells)',ammo:'Cells · Bullets',plan:'pick from range, thrive when cornered',
+  cats:[['Weapons',[[3,'Vortex'],[2,'Rifle'],[2,'Machine Gun'],[2,'Crylink'],[1,'Shotgun']]],
+        ['Movement',[[3,'Strafe Jump'],[3,'Rocket Jump'],[3,'Bunnyhop'],[3,'Ramp Slide']]],
+        ['Reactions',[[3,'Dodge'],[3,'Air Control'],[2,'Airshot'],[2,'Camp Break']]],
+        ['Field items',[[2,'Shield'],[2,'Mega Health'],[2,'Shard'],[2,'Ammo Pack']]]],
+  pilot:'Charge Vortex from Long, jump out of trouble, and let them collapse the range — that\'s when your <b>+1 Action</b> kicks in. Hold <b>Last Stand</b> for the moment a rusher thinks they\'ve got you.'},
+ {n:'Hit & Run',who:'slipperysalamander · The Runner',port:'🦎',ac:'var(--a-none)',ammo:'Bullets',plan:'never stop, trade life for tempo',
+  cats:[['Weapons',[[3,'Machine Gun'],[2,'Crylink'],[2,'Mine Layer'],[2,'Shotgun']]],
+        ['Movement',[[3,'Bunnyhop'],[3,'Strafe Jump'],[3,'Ramp Slide'],[3,'Rocket Jump']]],
+        ['Reactions',[[3,'Dodge'],[3,'Air Control'],[2,'Camp Break'],[2,'Airshot']]],
+        ['Field items',[[2,'Speed'],[2,'Invisibility'],[3,'Shard'],[2,'Ammo Pack']]]],
+  pilot:'Stay moving to stay Cloaked, mine the item spawns, and chip with MG. You\'ll die — that\'s fine, <b>Right Back Up</b> puts you back next turn. Deny the map more than you fight for it.'},
+ {n:"Beginner's Luck",who:'mouseeyeeater · The Rookie',port:'🐭',ac:'var(--a-rockets)',ammo:'Rockets · everything',plan:'spam, snowball off frags, no finesse',
+  cats:[['Weapons',[[3,'Hagar'],[3,'Mortar'],[3,'Machine Gun'],[2,'Shotgun'],[2,'Fireball'],[2,'Seeker'],[1,'Devastator']]],
+        ['Movement',[[3,'Bunnyhop'],[3,'Strafe Jump'],[3,'Ramp Slide'],[3,'Rocket Jump']]],
+        ['Field items',[[3,'Ammo Pack'],[3,'Shard'],[2,'Strength'],[2,'Speed'],[2,'Mega Health']]]],
+  pilot:'<b>Zero Reactions</b> — you can\'t play them, so the deck is all offense. Throw everything, land your buffed first-shot, and every frag snowballs you with Momentum + ammo. <b>Happy To Be Here!</b> when it\'s already chaos.'},
+ {n:'The Machine',who:'Bingus · The Machine',port:'🤖',ac:'var(--mag)',ammo:'Cells · Bullets',plan:'hold an angle, delete on sight',
+  cats:[['Weapons',[[3,'Vortex'],[3,'Rifle'],[3,'Machine Gun'],[2,'Arc'],[2,'Crylink']]],
+        ['Movement',[[3,'Ramp Slide']]],
+        ['Reactions',[[3,'Camp Break'],[3,'Dodge'],[2,'Air Control'],[2,'Airshot']]],
+        ['Field items',[[3,'Mega Armor'],[3,'Mega Health'],[3,'Shard'],[2,'Shield'],[3,'Ammo Pack']]]],
+  pilot:'<b>Almost no movement — by design.</b> Stack armor, sit on a lane, and stay above 100 so your hitscan can\'t be Dodged. <b>Lock-On</b> when two foes line up. Your weakness is a flank; Camp Break punishes anyone who parks in your sights.'},
+ {n:'The Faithful',who:'booger · The Faithful',port:'👃',ac:'var(--yellow)',ammo:'Bullets · Cells',plan:'keep allies alive, control space',
+  cats:[['Weapons',[[3,'Machine Gun'],[2,'Crylink'],[2,'Electro'],[2,'Mortar']]],
+        ['Movement',[[3,'Ramp Slide'],[3,'Strafe Jump'],[3,'Bunnyhop']]],
+        ['Reactions',[[3,'Air Control'],[3,'Dodge'],[2,'Camp Break'],[2,'Airshot']]],
+        ['Field items',[[3,'Mega Health'],[3,'Mega Armor'],[2,'Shield'],[2,'Ammo Pack'],[2,'Strength']]]],
+  pilot:'Play <b>within Close of your team</b> so the Command aura is always live, zone chokes with Electro/Crylink, and out-sustain the enemy. Your damage is −4 — you win the game on the scoreboard of everyone <em>else</em>. <b>Rally</b> turns a losing teamfight.'},
+ {n:'Ambush',who:'kelso · The Ambusher',port:'☺️',ac:'#178a76',ammo:'Cells · Bullets',plan:'one perfect shot from the dark',
+  cats:[['Weapons',[[3,'Vortex'],[3,'Rifle'],[2,'Shotgun'],[2,'Crylink']]],
+        ['Movement',[[3,'Strafe Jump'],[3,'Ramp Slide'],[2,'Bunnyhop'],[2,'Rocket Jump']]],
+        ['Reactions',[[3,'Dodge'],[3,'Camp Break'],[2,'Air Control']]],
+        ['Field items',[[2,'Invisibility'],[2,'Shield'],[2,'Mega Health'],[3,'Shard'],[3,'Ammo Pack']]]],
+  pilot:'You fire <b>once a turn</b> — so make it a charged Vortex or a Rifle to the back of the head. Reposition with Invisibility and movement to line up the <b>+8 sneak</b> first shot, and hold <b>Perfect Spot</b> for a guaranteed pick on someone who thinks they’re safe.'},
+ {n:'Full Map Control',who:'meth_invader · All-Ears',port:'🎧',ac:'#5a74d6',ammo:'Bullets · Cells',plan:'react to the whole board, sustain solo',
+  cats:[['Weapons',[[3,'Machine Gun'],[2,'Vortex'],[2,'Crylink'],[2,'Mortar']]],
+        ['Movement',[[3,'Ramp Slide'],[2,'Strafe Jump'],[2,'Bunnyhop']]],
+        ['Reactions',[[3,'Dodge'],[3,'Camp Break'],[3,'Air Control'],[3,'Airshot']]],
+        ['Field items',[[3,'Mega Health'],[2,'Mega Armor'],[2,'Shield'],[3,'Shard'],[2,'Ammo Pack']]]],
+  pilot:'Max Reactions — with <b>Golden Ears</b> they fire against anyone <b>anywhere on the map</b>, not just in range. No ally can heal you, so bank Megas for your own sustain. <b>Wallhack</b> to read a whole round and blow it open.'},
+ {n:'Overwatch',who:'trashpanda · The Perch',port:'🦝',ac:'#5f7488',ammo:'Bullets · Cells',plan:'pick a lane, never move, act last',
+  cats:[['Weapons',[[3,'Rifle'],[3,'Vortex'],[3,'Machine Gun'],[2,'Crylink'],[2,'Arc']]],
+        ['Movement',[[3,'Ramp Slide']]],
+        ['Reactions',[[3,'Camp Break'],[3,'Dodge'],[3,'Airshot'],[3,'Air Control']]],
+        ['Field items',[[3,'Mega Armor'],[2,'Mega Health'],[2,'Shield'],[3,'Shard'],[2,'Ammo Pack']]]],
+  pilot:'Don’t move — that keeps <b>+6 hitscan</b> and lets you fire Long at <b>any</b> node. Acting <b>last</b> is a gift: you shoot whoever overcommitted. Armor up so a forced reposition doesn’t kill you, and hold <b>Overwatch</b> on your flank.'},
+ {n:'Get Off My Lawn',who:'jared · The Boomer',port:'👴',ac:'#8a763f',ammo:'Rockets · Shells',plan:'no tricks — tank up and point',
+  cats:[['Weapons',[[3,'Shotgun'],[3,'Mortar'],[3,'Machine Gun'],[3,'Devastator'],[3,'Hagar'],[2,'Fireball'],[2,'Rifle']]],
+        ['Movement',[[3,'Ramp Slide']]],
+        ['Field items',[[3,'Mega Health'],[3,'Mega Armor'],[3,'Shard'],[3,'Ammo Pack'],[2,'Strength'],[2,'Shield'],[2,'Speed']]]],
+  pilot:'jared can’t play <b>Reactions or jump-tech</b> and draws only 3 a turn — so there are none, and every card has to hit hard on its own. Stack Megas (you’re <b>immune to knockback and all status</b>, so just walk it in), point big weapons, and cash <b>Boomer Rage</b> for your one glorious turn.'},
+];
+document.getElementById('deckGal').innerHTML = DECKS.map(d=>{
+  const total = d.cats.reduce((t,c)=>t+c[1].reduce((s,x)=>s+x[0],0),0);
+  return `<article class="deck" style="--ac:${d.ac}">
+    <div class="dh"><div class="dport">${d.port}</div><div><div class="dnm">${d.n}</div><div class="dwho">${d.who}</div></div></div>
+    <div class="dbody">
+      <div class="dmeta"><span>ammo · <b>${d.ammo}</b></span><span><b>${total}</b> cards</span></div>
+      ${d.cats.map(c=>`<div class="cat">${c[0]}</div>`+c[1].map(x=>`<div class="crow"><span class="ct">${x[0]}×</span><span class="cn">${x[1]}</span></div>`).join('')).join('')}
+      <p class="pilot"><b>Plan:</b> ${d.plan}. ${d.pilot}</p>
+    </div>
+  </article>`;
+}).join('');
+
+const MODES=[
+ {n:'Deathmatch / FFA',t:'2–6 · solo',win:'first to <b>15</b> frags (or most at 10-min)',r:['All items live on the Ring.','Killing blow scores; Bounty rule optional.']},
+ {n:'Team Deathmatch',t:'teams',win:'team to <b>50</b> frags',r:['Friendly fire off.','Shared frag pool across the team.']},
+ {n:'Duel',t:'1v1',win:'most frags at <b>10 min</b> (or first to 10)',r:['Arena Row, not the Ring.','Item timing is the whole game — track every dial.']},
+ {n:'Capture the Flag',t:'teams',win:'most caps in a <b>10-round</b> match (frags break ties)',r:['A flag token sits in each base; take the enemy\'s home to your own to score.','Carrying caps your Momentum at 3 but grants <b>−25% incoming</b> (adrenaline) — catchable, not free.','A dropped flag returns after 1 untouched round. Match ≈ 20–30 min.']},
+ {n:'Clan Arena',t:'teams',win:'best of <b>9</b> rounds',r:['No map items. Spawn each round at 100 / 100 with your full Arsenal loaded.','One life per round — no respawn until the round ends.']},
+ {n:'Freeze Tag',t:'teams',win:'freeze the whole enemy team',r:['A frag freezes instead of kills.','An ally thaws you by spending a turn adjacent.','Best of 5 rounds.']},
+ {n:'Juggernaut',t:'2–6 · solo',win:'most points as the Jugg (or to <b>20</b>)',r:['One Fighter is the Jugg: 200/200 cap, all ammo, +25% damage.','The Jugg scores each turn survived; whoever lands the killing blow becomes the new Jugg.','Spawn Shield does not protect the Jugg.']},
+ {n:'Domination',t:'teams',win:'first to <b>30</b> points',r:['Three ring nodes are control points.','Each point you hold ticks +1 at the start of each round. Standing on it grounded captures it.']},
+ {n:'Onslaught',t:'teams',win:'destroy the enemy <b>Generator</b>',r:['Generator has 200 stack and is invulnerable until you link your control points across the Ring.','Once linked, splash it down before they re-take a point.']},
+ {n:'Nexball',t:'teams',win:'first to <b>3</b> goals',r:['Weapon damage does not score. A ball token is carried or passed with the Blaster.','Shoot the ball into the enemy goal node to score. Movement decks shine.']},
+ {n:'Assault',t:'asym',win:'break the objective vs a timer',r:['Attackers destroy an objective (150 stack) within 8 rounds; defenders hold.','Teams swap sides; the faster attack wins.']},
+ {n:'Race / CTS',t:'2–6 · solo',win:'first to run the Ring <b>3×</b>',r:['No frags needed — pure movement. A Momentum deck can win untouched.','Mines and knockback still slow rivals; that\'s the only "combat".']},
+ {n:'Instagib',t:'any',win:'FFA to <b>20</b> (or team variant)',r:['Everyone carries only the Vaporizer — one clean grounded hit is a frag.','No stack game, no pickups: all aim and movement.']},
+];
+document.getElementById('modeGal').innerHTML = MODES.map(m=>
+  `<article class="mode"><h4>${m.n}</h4><div class="tags">${m.t}</div><div class="win">WIN · ${m.win}</div><ul>${m.r.map(x=>`<li>${x}</li>`).join('')}</ul></article>`).join('');
+</script>

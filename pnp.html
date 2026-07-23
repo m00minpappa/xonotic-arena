@@ -1,0 +1,331 @@
+<title>XONOTIC: ARENA — Print &amp; Play</title>
+<style>
+  :root{
+    --paper:#eef1f5;--card:#ffffff;--ink:#161b22;--ink2:#3c4652;--muted:#6b7686;--line:#c6cfdb;--line2:#e2e8f0;
+    --cyan:#0e93a8;--mag:#d81f6a;--amber:#c76a1e;--green:#1f9d57;--yellow:#b8890c;--violet:#6d4bd6;
+    --a-none:#6d4bd6;--a-shells:#b07d1e;--a-bullets:#5f7488;--a-rockets:#d1521f;--a-cells:#0e93a8;
+    --mono:ui-monospace,"Cascadia Code","SFMono-Regular","JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.5;font-size:15px}
+
+  /* toolbar (screen only) */
+  .bar{position:sticky;top:0;z-index:40;background:#0c1017;color:#e8eef6;border-bottom:1px solid #26303f}
+  .bar-in{max-width:216mm;margin:0 auto;padding:11px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .bar .brand{font-family:var(--mono);font-weight:700;letter-spacing:.5px}
+  .bar .brand b{color:#31dbe6}
+  .bar .sp{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .bar a,.bar button{font-family:var(--mono);font-size:12.5px;color:#8593a6;text-decoration:none;background:transparent;border:1px solid #26303f;padding:7px 12px;border-radius:7px;cursor:pointer}
+  .bar a:hover,.bar button:hover{color:#31dbe6;border-color:#1a99a3}
+  .bar button.primary{color:#0c1017;background:#31dbe6;border-color:#31dbe6;font-weight:700}
+
+  .guide{max-width:216mm;margin:20px auto;padding:0 16px}
+  .guide .gcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .guide h1{font-family:var(--sans);font-weight:800;text-transform:uppercase;letter-spacing:-.02em;font-size:26px;margin:0 0 4px}
+  .guide .gsub{color:var(--muted);font-family:var(--mono);font-size:12.5px;margin:0 0 18px}
+  .guide .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:16px}
+  .guide h3{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--cyan);margin:0 0 8px}
+  .guide ol,.guide ul{margin:0;padding-left:18px;color:var(--ink2);font-size:13.5px;line-height:1.55}
+  .guide li{margin-bottom:5px}
+  .guide .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .guide .tag{font-family:var(--mono);font-size:11.5px;color:var(--ink2);border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:#f7f9fc}
+
+  /* pages */
+  .sheet{width:216mm;min-height:279mm;margin:0 auto 22px;background:#fff;box-shadow:0 3px 16px rgba(20,30,50,.12);padding:14mm 13mm;position:relative}
+  .sheet-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1.5px solid var(--ink);padding-bottom:7px;margin-bottom:12px}
+  .sheet-h .st{font-family:var(--sans);font-weight:800;text-transform:uppercase;letter-spacing:-.01em;font-size:17px}
+  .sheet-h .st b{color:var(--cyan)}
+  .sheet-h .sm{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.3px;text-align:right;max-width:60%}
+
+  /* card grid */
+  .grid-cards{display:flex;flex-wrap:wrap;gap:4mm;align-content:flex-start}
+
+  /* weapon / tech / item card */
+  .card{width:60mm;min-height:86mm;background:var(--card);border:1px solid var(--ink);border-radius:2.5mm;padding:0;overflow:hidden;display:flex;flex-direction:column;break-inside:avoid}
+  .card .edge{height:2.4mm;background:var(--ac)}
+  .card .in{padding:2.6mm 3mm 3mm;display:flex;flex-direction:column;flex:1}
+  .card .ch{display:flex;justify-content:space-between;align-items:flex-start;gap:2mm}
+  .card .cn{font-family:var(--sans);font-weight:800;text-transform:uppercase;font-size:11pt;line-height:1.02;letter-spacing:-.01em}
+  .card .cam{font-family:var(--mono);font-size:6.5pt;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#fff;background:var(--ac);padding:1mm 1.4mm;border-radius:1mm;white-space:nowrap}
+  .card .ctype{font-family:var(--mono);font-size:6pt;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:.6mm 0 1.8mm}
+  .card .crange{display:flex;gap:1mm;margin-bottom:2mm}
+  .card .crange span{flex:1;text-align:center;font-family:var(--mono);font-size:5.6pt;letter-spacing:.3px;padding:.7mm 0;border:.3mm solid var(--line);border-radius:.8mm;color:var(--muted)}
+  .card .crange span.hot{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:700}
+  .card .cf{border-top:.3mm solid var(--line2);padding-top:1.4mm;margin-top:1.4mm}
+  .card .cf:first-of-type{border-top:0;margin-top:0;padding-top:0}
+  .card .cfl{font-family:var(--mono);font-size:5.8pt;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--ac)}
+  .card .cft{font-size:8pt;color:var(--ink);line-height:1.3}
+  .card .crole{margin-top:auto;font-family:var(--mono);font-size:6pt;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;padding-top:2mm}
+  .card.plain .cft{font-size:8.5pt}
+
+  /* avatar card */
+  .acard{width:92mm;min-height:60mm;background:#fff;border:1px solid var(--ink);border-radius:2.5mm;overflow:hidden;display:flex;flex-direction:column;break-inside:avoid}
+  .acard .ah{display:flex;gap:3mm;align-items:center;padding:2.6mm 3mm;border-bottom:.3mm solid var(--line);background:var(--acbg)}
+  .acard .aport{width:11mm;height:11mm;border-radius:2mm;display:grid;place-items:center;font-size:17pt;background:#fff;border:.4mm solid var(--ac);flex:none}
+  .acard .an{font-family:var(--sans);font-weight:800;text-transform:uppercase;font-size:12.5pt;line-height:1;letter-spacing:-.01em}
+  .acard .aa{font-family:var(--mono);font-size:6.6pt;letter-spacing:.8px;text-transform:uppercase;color:var(--ac);margin-top:1.2mm}
+  .acard .ab{padding:2.4mm 3mm 3mm;display:flex;flex-direction:column;gap:1.5mm}
+  .acard .al{display:flex;gap:2mm;font-size:8pt;line-height:1.28;align-items:baseline}
+  .acard .alb{font-family:var(--mono);font-size:5.6pt;font-weight:700;letter-spacing:.6px;padding:.5mm 1.3mm;border-radius:.8mm;flex:none;text-transform:uppercase;color:#fff}
+  .acard .al.b .alb{background:var(--green)}.acard .al.n .alb{background:var(--mag)}.acard .al.s .alb{background:var(--cyan)}
+  .acard .alt{color:var(--ink)}
+
+  /* location tiles */
+  .tiles{display:flex;flex-wrap:wrap;gap:4mm}
+  .tile{width:60mm;height:44mm;border:1px solid var(--ink);border-radius:2mm;padding:2.4mm 3mm;display:flex;flex-direction:column;break-inside:avoid;background:#fff}
+  .tile .tn{font-family:var(--mono);font-size:8pt;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+  .tile.base{border-color:var(--cyan);background:#f2fbfc}.tile.base .tn{color:var(--cyan)}
+  .tile.mid{border-color:var(--mag);background:#fdf1f6}.tile.mid .tn{color:var(--mag)}
+  .tile .trow{display:flex;gap:3mm;margin-top:2mm;flex:1}
+  .tile .slot{flex:1;border:.4mm dashed var(--line);border-radius:1.4mm;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:6pt;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;text-align:center;padding:1mm}
+  .tile .dial{width:16mm;flex:none;border:.4mm solid var(--line);border-radius:50%;aspect-ratio:1;display:grid;place-items:center;font-family:var(--mono);font-size:5.6pt;color:var(--muted);text-align:center;line-height:1.15}
+
+  /* tokens */
+  .toks{display:flex;flex-wrap:wrap;gap:2.5mm}
+  .tok{width:17mm;height:17mm;border:.5mm solid var(--tc,#333);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:#fff;break-inside:avoid;padding:1mm}
+  .tok.sq{border-radius:2mm}
+  .tok .ti{font-size:9pt;line-height:1}
+  .tok .tl{font-family:var(--mono);font-size:5pt;font-weight:700;letter-spacing:.2px;text-transform:uppercase;margin-top:.6mm;color:var(--tc,#333)}
+  .tokgroup{margin-bottom:4mm}
+  .tokgroup .tgh{font-family:var(--mono);font-size:8pt;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border-bottom:.3mm solid var(--line2);padding-bottom:1.5mm;margin-bottom:2.5mm}
+
+  /* fighter mat */
+  .mat{border:1.4px solid var(--ink);border-radius:3mm;padding:4mm;margin-bottom:6mm;break-inside:avoid;background:#fff}
+  .mat .mh{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:2mm;margin-bottom:3mm}
+  .mat .mt{font-family:var(--sans);font-weight:800;text-transform:uppercase;font-size:13pt;letter-spacing:-.01em}
+  .mat .mt b{color:var(--cyan)}
+  .mat .mfill{font-family:var(--mono);font-size:8pt;color:var(--muted)}
+  .mat .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:3mm 5mm}
+  .mat .mblk .lbl{font-family:var(--mono);font-size:7pt;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--ink2);margin-bottom:1.4mm}
+  .mat .track{display:flex;gap:0}
+  .mat .track i{flex:1;border:.4mm solid var(--line);border-right:0;height:6mm;display:grid;place-items:center;font-family:var(--mono);font-size:5.2pt;color:var(--muted)}
+  .mat .track i:last-child{border-right:.4mm solid var(--line)}
+  .mat .track.hp i{background:#f1faf4}.mat .track.ar i{background:#fbf7ec}
+  .mat .track i.mk{font-weight:700;color:var(--ink)}
+  .mat .mom{display:flex;gap:1.5mm}
+  .mat .mom i{width:7mm;height:7mm;border:.4mm solid var(--line);border-radius:1mm;display:grid;place-items:center;font-family:var(--mono);font-size:6pt;color:var(--muted)}
+  .mat .mom i.air{border-color:var(--cyan);color:var(--cyan);font-weight:700}
+  .mat .ammo{display:grid;grid-template-columns:1fr 1fr;gap:1.5mm}
+  .mat .ammo .a{display:flex;align-items:center;gap:1.5mm;font-family:var(--mono);font-size:7pt;border:.4mm solid var(--line);border-radius:1mm;padding:1mm 1.5mm}
+  .mat .ammo .a .sw{width:2.4mm;height:2.4mm;border-radius:.5mm}
+  .mat .ammo .a .wr{margin-left:auto;color:var(--muted)}
+  .mat .slots{display:flex;gap:1.5mm}
+  .mat .slots .sl{flex:1;border:.4mm dashed var(--line);border-radius:1mm;height:8mm;display:grid;place-items:center;font-family:var(--mono);font-size:5.6pt;color:var(--muted);text-transform:uppercase}
+  .mat .ars{border:.4mm dashed var(--line);border-radius:1.5mm;min-height:14mm;display:grid;place-items:center;font-family:var(--mono);font-size:6.4pt;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .mat .foot{display:flex;gap:3mm;margin-top:3mm;font-family:var(--mono);font-size:7pt;color:var(--ink2);flex-wrap:wrap}
+  .mat .foot span{border:.4mm solid var(--line);border-radius:1mm;padding:1.2mm 2mm}
+  .mat .foot b{color:var(--ink)}
+
+  .note{font-family:var(--mono);font-size:9pt;color:var(--muted);margin:2mm 0 4mm;line-height:1.5}
+
+  @media print{
+    @page{size:Letter;margin:10mm}
+    body{background:#fff}
+    .bar,.guide{display:none!important}
+    .sheet{width:auto;min-height:auto;margin:0;box-shadow:none;padding:0;break-after:page}
+    .sheet:last-child{break-after:auto}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+  @media(max-width:230mm){.sheet{width:100%;padding:8mm 6mm}}
+</style>
+
+<div class="bar">
+  <div class="bar-in">
+    <span class="brand"><b>XONOTIC</b>:ARENA · print &amp; play · v0.2</span>
+    <span class="sp">
+      <button class="primary" onclick="window.print()">⎙ Print</button>
+      <a href="rules.html">rules</a>
+      <a href="index.html">gallery</a>
+    </span>
+  </div>
+</div>
+
+<div class="guide">
+  <div class="gcard">
+    <h1>Print &amp; Play kit</h1>
+    <p class="gsub">// everything you need to build the game on your kitchen table</p>
+    <div class="grid">
+      <div>
+        <h3>How to print</h3>
+        <ol>
+          <li><b>US Letter</b>, portrait, <b>100% / actual size</b> (do <em>not</em> "fit to page" — it breaks card sizing).</li>
+          <li><b>Color</b> on, with "background graphics" enabled.</li>
+          <li>Cardstock (200–300gsm) if you have it; printer paper works if you sleeve.</li>
+          <li>Hit <b>⎙ Print</b> above, or <span style="font-family:var(--mono)">Ctrl/⌘+P</span>.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>What prints</h3>
+        <ul>
+          <li><b>P.1–2</b> Weapon cards (16)</li>
+          <li><b>P.3</b> Tech &amp; Item cards (16)</li>
+          <li><b>P.4–5</b> Avatar cards (10)</li>
+          <li><b>P.6</b> Location tiles (8)</li>
+          <li><b>P.7</b> Tokens &amp; markers</li>
+          <li><b>P.8</b> Fighter mats (2)</li>
+        </ul>
+      </div>
+      <div>
+        <h3>How many copies</h3>
+        <ul>
+          <li>Cards are <b>60×86mm</b> — cut on the borders.</li>
+          <li>A 40-card deck allows <b>≤3 of any card, ≤2 per powerup</b>. Photocopy the weapon/tech/item sheets <b>2–3×</b> to build a deck.</li>
+          <li>Print <b>one Fighter mat per player</b> (2–6) and cut out one <b>Avatar</b> each.</li>
+          <li>Arrange Location tiles in a <b>line</b> (duel) or <b>ring</b> (FFA).</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag">◈ needs: scissors · a few clips/beads as markers · optional sleeves</span>
+      <span class="tag">◈ full rules on the Rules page</span>
+    </div>
+  </div>
+</div>
+
+<!-- SHEETS render below -->
+<div id="sheets"></div>
+
+<script>
+const AM={none:['No Ammo','var(--a-none)'],shells:['Shells','var(--a-shells)'],bullets:['Bullets','var(--a-bullets)'],rockets:['Rockets','var(--a-rockets)'],cells:['Cells','var(--a-cells)']};
+const BANDS=['PB','CL','MID','LNG'];
+function rp(r){return `<div class="crange">${BANDS.map((b,i)=>`<span class="${r[i]?'hot':''}">${b}</span>`).join('')}</div>`}
+
+const WEAPONS=[
+ ['Blaster','none',0,[1,1,0,0],'12 dmg + knock back 1 band','Blaster-Jump: −15 self, +3 MOM, move 2','free staple · juggle'],
+ ['Shotgun','shells',1,[1,1,0,0],'20 / 12 / 4 by band (spread)','Melee slap 30 (PB only)','close finisher'],
+ ['Machine Gun','bullets',2,[0,1,1,0],'18 hitscan, rapid','Burst 24 (Mid/Lng); skip next Fire','steady pressure'],
+ ['Mortar','rockets',1,[0,0,1,1],'Lob → 30 splash next Upkeep','Bounce 1 loc then arm · pops Blobs','zone denial'],
+ ['Electro','cells',1,[0,0,1,0],'22 bolt · detonates Blobs','Place up to 3 Blobs (15 ea)','combo engine'],
+ ['Crylink','cells',1,[0,1,1,0],'25 spread + pull target 1 band','Slow: 15 + strip 2 MOM','anti-runner'],
+ ['Vortex','cells',2,[0,0,1,1],'40 Mid / 30 Long / 25 Close · +20 charged','Zoom: next shot ignores airborne','duel decider'],
+ ['Hagar','rockets',1,[0,1,1,0],'Spray 3×8 (random)','Load ×4 → 4×10 burst','wall spam'],
+ ['Devastator','rockets',2,[0,0,1,1],'Rocket-in-flight · remote-det 45','Ride it: −20, +4 MOM, move 3, 30','splash + mobility'],
+ ['Rifle','bullets',1,[0,0,0,1],'35 hitscan Long (0 at PB)','3-round burst 3×12','sniper'],
+ ['Arc','cells',2,[0,1,1,0],'Beam 10 + lock (auto-hit next)','Lightning 20 (Close)','sustained lock'],
+ ['Fireball','rockets',2,[0,0,1,0],'35 splash + burn 5 next Upkeep','Napalm zone token','area burn'],
+ ['Seeker','rockets',2,[1,1,1,1],'Tag → homing 20, can’t miss','Flac burst · +10 vs airborne','guaranteed chip'],
+ ['Mine Layer','rockets',1,[0,0,0,0],'Plant Mine: 35 on enemy entry','Detonate all mines','traps'],
+ ['Vaporizer','cells',3,[0,0,1,1],'Instant frag if grounded','Blaster-Jump','Instagib only'],
+ ['@!#% Tuba','none',0,[1,0,0,0],'15 to all adjacent','5 each time you Move','meme MVP'],
+];
+const TECH=[
+ ['Strafe Jump','Move · Jump-tech','+2 MOM, and don’t spend your Move this turn.'],
+ ['Bunnyhop','Move · Jump-tech','If you moved: +1 extra Move and skip end-turn MOM decay.'],
+ ['Rocket Jump','Move · Jump-tech','Needs a rocket weapon: −20 self, +4 MOM, move 3.'],
+ ['Ramp Slide','Move','Move 2 locations for the cost of 1; gain +1 MOM.'],
+ ['Air Control','Reaction','While airborne &amp; hit: reduce the damage by an extra 3.'],
+ ['Dodge','Reaction','Spend 2 MOM: reduce one incoming hit by 15.'],
+ ['Airshot','Reaction','Hit an airborne foe: +10 damage &amp; knock 3 MOM off them.'],
+ ['Camp Break','Reaction','Vs a foe who skipped their Move: your next shot ignores armor.'],
+];
+const ITEMS=[
+ ['Mega Health','Item · green','+100 HP (overstack rots). Respawn dial 3 rounds.','green'],
+ ['Mega Armor','Item · gold','+100 Armor. Respawn dial 3 rounds.','yellow'],
+ ['Shard','Item · green','+5 health or armor — grabbable even at full. Dial 1.','green'],
+ ['Ammo Pack','Item · amber','Refill one ammo type by its start amount. Dial 2.','amber'],
+ ['Strength','Powerup','2 turns: weapon damage ×2, knockback +1 band. Dial 6.','mag'],
+ ['Shield','Powerup','2 turns: incoming ×⅓, knockback halved. Dial 6.','cyan'],
+ ['Speed','Powerup','2 turns: +2 MOM/turn, +1 Action, incoming ×1.25. Dial 6.','cyan'],
+ ['Invisibility','Powerup','2 turns: can’t be targeted from beyond Close. Dial 6.','violet'],
+];
+const AVA=[
+ ['idfarms','The Farmer','🚜','var(--green)','#f1faf4','+1 MOM/Move; while stack ≥75, weapon damage +4.','Below 50 stack: −1 Action (bonus needs 75+).','Full Farm · 1×/game · set stack to 200, refill all ammo.'],
+ ['Dr. Shrimp PR','The Clutch','🦐','var(--cyan)','#f2fbfc','Hitscan +3; jump-tech +1 MOM; low or outnumbered → +1 Action.','Max stack 140; while ≥100 stack, damage −3.','Last Stand · 1×/game · survive a lethal hit at 1 stack, +3 MOM.'],
+ ['slipperysalamander','The Runner','🦎','var(--violet)','#f4f1fd','+2 MOM/Move; Cloaked when you moved; grabs items airborne.','Max stack 130; takes +10 when hit.','Right Back Up · 1×/round · respawn next turn with Spawn Shield.'],
+ ['mouseeyeeater','The Rookie','🐭','var(--amber)','#fdf5ec','First shot each turn +5; on a frag, +2 MOM + refill an ammo.','Can’t hold Reactions; must grab the first item touched.','Happy To Be Here! · 1×/game · one turn of max damage + Action.'],
+ ['Bingus','The Machine','🤖','var(--mag)','#fdf1f6','Hitscan +7, ignores 1 band; +25 spawn armor; &gt;100 stack → hitscan can’t be Dodged.','No jump-tech; −1 MOM/Move (a turret).','Lock-On · 1×/round · next hitscan auto-hits all in range.'],
+ ['booger','The Faithful','👃','var(--yellow)','#fbf7ec','Allies in Close: +3 damage, +1 MOM. Solo: +2 to least-used system.','Own weapon damage −4 (leads from behind).','Rally · 1×/game · team refuels, clears debuffs, gains Spawn Shield.'],
+ ['kelso','The Ambusher','☺️','#178a76','#eefaf7','First shot +8 vs anyone who didn’t damage you last turn; immune to panic.','Fires only one weapon per turn.','Perfect Spot · 1×/game · free move to any node + undodgeable sneak hit.'],
+ ['meth_invader','All-Ears','🎧','#5a74d6','#f0f2fd','Golden Ears: ignore enemy Cloak/Invis; Reaction to any action anywhere.','Tuned Out: can’t receive any ally buff or heal.','Wallhack · 1×/game · reveal all enemy hands + free Reactions till next turn.'],
+ ['trashpanda','The Perch','🦝','#5f7488','#f3f6f9','Didn’t move last turn: hitscan +6, may fire Long at any node.','Unhurried: −1 Action each turn; always acts last in the round.','Overwatch · 1×/round · first enemy into your lane takes a free hitscan shot.'],
+ ['jared','The Boomer','👴','#8a763f','#f8f5ec','Immune to knockback &amp; all status; can’t be Bountied.','Boomer: hand 3, −1 Action, no Reactions/jump-tech, weapons −3.','Boomer Rage · 1×/game · +2 Actions, ignore damage penalty, shots maximized.'],
+];
+const TILES=[
+ ['base','BASE · A'],['mid','FLANK'],['mid','MID'],['base','BASE · B'],
+ ['','NODE'],['','NODE'],['','NODE'],['','NODE'],
+];
+const cV={green:'var(--green)',yellow:'var(--yellow)',amber:'var(--amber)',mag:'var(--mag)',cyan:'var(--cyan)',violet:'var(--violet)'};
+const TOKENS=[
+ ['Items',[['✚','Mega H','var(--green)'],['◈','Mega A','var(--yellow)'],['▪','Shard','var(--green)'],['▪','Shard','var(--green)'],['▪','Shard','var(--green)'],['⦿','Ammo·S','var(--a-shells)'],['⦿','Ammo·B','var(--a-bullets)'],['⦿','Ammo·R','var(--a-rockets)'],['⦿','Ammo·C','var(--a-cells)']]],
+ ['Powerups',[['✦','Strength','var(--mag)'],['✦','Shield','var(--cyan)'],['✦','Speed','var(--cyan)'],['✦','Invis','var(--violet)']]],
+ ['Board tokens',[['◍','Blob','var(--cyan)'],['◍','Blob','var(--cyan)'],['◍','Blob','var(--cyan)'],['◍','Blob','var(--cyan)'],['◍','Blob','var(--cyan)'],['◍','Blob','var(--cyan)'],['✸','Mortar','var(--a-rockets)'],['✸','Mortar','var(--a-rockets)'],['✸','Mortar','var(--a-rockets)'],['⊗','Mine','var(--a-rockets)'],['⊗','Mine','var(--a-rockets)'],['⊗','Mine','var(--a-rockets)'],['⊗','Mine','var(--a-rockets)'],['➤','Rocket','var(--a-rockets)'],['➤','Rocket','var(--a-rockets)'],['≈','Napalm','var(--amber)'],['≈','Napalm','var(--amber)']]],
+ ['Objectives',[['⚑','Flag A','var(--cyan)'],['⚑','Flag B','var(--mag)'],['●','Ball','var(--ink)']]],
+ ['Markers',[['◆','Stack','var(--green)'],['◆','Stack','var(--green)'],['◆','Stack','var(--green)'],['◆','Stack','var(--green)'],['▲','MOM','var(--cyan)'],['▲','MOM','var(--cyan)'],['▲','MOM','var(--cyan)'],['▲','MOM','var(--cyan)'],['⛨','Shield','var(--cyan)'],['⛨','Shield','var(--cyan)'],['★','Frag','var(--amber)'],['★','Frag','var(--amber)'],['★','Frag','var(--amber)'],['★','Frag','var(--amber)']]],
+];
+
+function sheet(title,sub,inner){return `<div class="sheet"><div class="sheet-h"><div class="st">XONOTIC:<b>ARENA</b> · ${title}</div><div class="sm">${sub}</div></div>${inner}</div>`}
+
+function weaponCard(w){const[n,a,cost,r,p,s,role]=w;const[al,ac]=AM[a];
+ return `<div class="card" style="--ac:${ac}"><div class="edge"></div><div class="in">
+   <div class="ch"><div class="cn">${n}</div><div class="cam">${al}${cost?` ×${cost}`:''}</div></div>
+   <div class="ctype">Weapon · fire = 1 Action + ammo</div>
+   ${rp(r)}
+   <div class="cf"><div class="cfl">Primary</div><div class="cft">${p}</div></div>
+   <div class="cf"><div class="cfl">Secondary</div><div class="cft">${s}</div></div>
+   <div class="crole">${role}</div>
+ </div></div>`}
+
+function miniCard(n,type,text,ac){
+ return `<div class="card plain" style="--ac:${ac}"><div class="edge"></div><div class="in">
+   <div class="ch"><div class="cn">${n}</div></div>
+   <div class="ctype">${type}</div>
+   <div class="cf"><div class="cft">${text}</div></div>
+ </div></div>`}
+
+function avatarCard(v){const[n,arch,port,ac,bg,b,ne,s]=v;
+ return `<div class="acard" style="--ac:${ac};--acbg:${bg}">
+   <div class="ah"><div class="aport">${port}</div><div><div class="an">${n}</div><div class="aa">${arch}</div></div></div>
+   <div class="ab">
+     <div class="al b"><span class="alb">Buff</span><span class="alt">${b}</span></div>
+     <div class="al n"><span class="alb">Nerf</span><span class="alt">${ne}</span></div>
+     <div class="al s"><span class="alb">Sig</span><span class="alt">${s}</span></div>
+   </div></div>`}
+
+function tile(t){const[cls,nm]=t;
+ return `<div class="tile ${cls}"><div class="tn">${nm}</div><div class="trow">
+   <div class="slot">item<br>slot</div><div class="dial">respawn<br>dial<br>0–6</div><div class="slot">fighters<br>here</div>
+ </div></div>`}
+
+function token(t){const[ic,lb,c]=t;
+ return `<div class="tok ${lb==='Ball'||lb==='Shard'?'':''}" style="--tc:${c}"><div class="ti" style="color:${c}">${ic}</div><div class="tl">${lb}</div></div>`}
+
+// Fighter mat markup (static-ish)
+const STK=[0,20,40,60,80,100,120,140,160,180,200];
+function stackTrack(cls){return `<div class="track ${cls}">${STK.map(v=>`<i class="${v===100?'mk':''}">${v}</i>`).join('')}</div>`}
+const AMMO4=[['Shells 8','var(--a-shells)'],['Bullets 20','var(--a-bullets)'],['Rockets 8','var(--a-rockets)'],['Cells 12','var(--a-cells)']];
+function mat(){return `<div class="mat">
+  <div class="mh"><div class="mt">Fighter <b>//</b> <span style="color:var(--muted);font-weight:600">____________</span></div><div class="mfill">Avatar: ______________</div></div>
+  <div class="mgrid">
+    <div class="mblk" style="grid-column:1/3"><div class="lbl">Health — regen &lt;100 · cap 200</div>${stackTrack('hp')}</div>
+    <div class="mblk" style="grid-column:1/3"><div class="lbl">Armor — absorbs 60% · no regen</div>${stackTrack('ar')}</div>
+    <div class="mblk"><div class="lbl">Momentum (≥4 = Airborne)</div><div class="mom">${[0,1,2,3,4,5,6].map(v=>`<i class="${v>=4?'air':''}">${v}</i>`).join('')}</div></div>
+    <div class="mblk"><div class="lbl">Actions / turn</div><div class="mom"><i>1</i><i>2</i><i style="border-style:dashed">+</i><span style="font-family:var(--mono);font-size:6pt;color:var(--muted);align-self:center;margin-left:1mm">+1 airborne / Speed</span></div></div>
+    <div class="mblk"><div class="lbl">Ammo (start · cap ×2)</div><div class="ammo">${AMMO4.map(a=>`<div class="a"><span class="sw" style="background:${a[1]}"></span>${a[0]}<span class="wr">___</span></div>`).join('')}</div></div>
+    <div class="mblk"><div class="lbl">Powerup / status (2-turn)</div><div class="slots"><div class="sl">slot 1</div><div class="sl">slot 2</div></div>
+      <div class="lbl" style="margin-top:2.5mm">Signature</div><div class="slots"><div class="sl">☐ used this game</div></div></div>
+    <div class="mblk" style="grid-column:1/3"><div class="lbl">Arsenal — equipped weapons (Blaster free)</div><div class="ars">place equipped weapon cards here</div></div>
+  </div>
+  <div class="foot"><span>Frags: <b>______</b></span><span>Start: <b>100 / 0</b></span><span>Hand: <b>5</b></span><span>Grounded to grab items</span></div>
+</div>`}
+
+// ---- assemble ----
+let out='';
+out+=sheet('weapon cards <span style="color:var(--muted);font-weight:600">1 / 2</span>','Cut 60×86mm. Photocopy up to 3× per card to build a deck.',
+  `<div class="grid-cards">${WEAPONS.slice(0,9).map(weaponCard).join('')}</div>`);
+out+=sheet('weapon cards <span style="color:var(--muted);font-weight:600">2 / 2</span>','Fire = 1 Action + printed ammo. Blaster costs no ammo.',
+  `<div class="grid-cards">${WEAPONS.slice(9).map(weaponCard).join('')}</div>`);
+out+=sheet('tech &amp; item cards','Reactions are played on an opponent’s turn. Powerups: max 2 per deck.',
+  `<div class="grid-cards">${TECH.map(t=>miniCard(t[0],t[1],t[2],'var(--cyan)')).join('')}${ITEMS.map(t=>miniCard(t[0],t[1],t[2],cV[t[3]])).join('')}</div>`);
+out+=sheet('avatar cards <span style="color:var(--muted);font-weight:600">1 / 2</span>','One per player. Pick before decks are revealed. Not part of the 40-card deck.',
+  `<div class="grid-cards" style="gap:5mm">${AVA.slice(0,6).map(avatarCard).join('')}</div>`);
+out+=sheet('avatar cards <span style="color:var(--muted);font-weight:600">2 / 2</span>','Buff + Nerf are always on; the Signature is a limited-use trump.',
+  `<div class="grid-cards" style="gap:5mm">${AVA.slice(6).map(avatarCard).join('')}</div>`);
+out+=sheet('location tiles','Arrange in a LINE for a duel, or a RING (6 for 3–4p, 8 for 5–6p). Range = steps between fighters.',
+  `<p class="note">Seed items per the Mode Card. Set a tile’s respawn dial when its item is taken; count it down 1 per round.</p><div class="tiles">${TILES.map(tile).join('')}</div>`);
+out+=sheet('tokens &amp; markers','Cut out and share the pool. Use clips or beads for Stack &amp; Momentum if you prefer.',
+  TOKENS.map(g=>`<div class="tokgroup"><div class="tgh">${g[0]}</div><div class="toks">${g[1].map(token).join('')}</div></div>`).join(''));
+out+=sheet('fighter mats','Print one per player (2–6). Track Stack, Momentum, Ammo &amp; Actions here.',
+  mat()+mat());
+document.getElementById('sheets').innerHTML=out;
+</script>
