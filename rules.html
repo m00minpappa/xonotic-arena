@@ -22,6 +22,11 @@
   .brand .tag{color:var(--muted2);font-weight:500;font-size:12px;letter-spacing:2px;text-transform:uppercase}
   .backlink{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:6px 11px;border-radius:7px}
   .backlink:hover{color:var(--cyan);border-color:var(--cyan-dim)}
+  .sitenav{display:flex;gap:2px;align-items:center;background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:9px;padding:3px}
+  .sitenav a,.sitenav span{font-family:var(--mono);font-size:12.5px;letter-spacing:.3px;text-decoration:none;color:var(--muted);padding:5px 11px;border-radius:6px;white-space:nowrap}
+  .sitenav a:hover{color:var(--cyan);background:rgba(49,219,230,.08)}
+  .sitenav .active{color:#08111a;background:var(--cyan);font-weight:700}
+  .sitenav a:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 
   /* layout */
   .shell{max-width:1220px;margin:0 auto;padding:0 22px;position:relative;z-index:1;display:grid;grid-template-columns:230px 1fr;gap:38px;align-items:start}
@@ -122,7 +127,11 @@
 <header class="hud">
   <div class="hud-in">
     <div class="brand"><span class="x">XONOTIC:ARENA</span><span class="tag">complete rules · v0.2</span></div>
-    <a class="backlink" href="index.html">◄ card gallery</a>
+    <nav class="sitenav">
+      <a href="index.html">Gallery</a>
+      <span class="active">Rules</span>
+      <a href="pnp.html">Print &amp; Play</a>
+    </nav>
   </div>
 </header>
 
