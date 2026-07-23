@@ -77,7 +77,13 @@
   .sitenav a:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 
   /* ---- hero ---- */
-  .hero{padding:74px 0 40px;position:relative}
+  .hero{padding:74px 0 40px;position:relative;display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap}
+  .hero-main{flex:1 1 480px;min-width:0}
+  .hero-jump{display:flex;flex-direction:column;gap:2px;font-family:var(--mono);flex:0 0 auto;padding-top:6px}
+  .hero-jump .hj-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);margin:0 0 10px 14px}
+  .hero-jump a{font-size:14px;color:var(--muted);text-decoration:none;padding:6px 14px;border-left:2px solid var(--line-soft);letter-spacing:.4px;transition:color .15s,border-color .15s}
+  .hero-jump a:hover{color:var(--cyan);border-left-color:var(--cyan)}
+  .hero-jump a:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
   .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin:0 0 18px}
   .eyebrow::before{content:">_ ";color:var(--cyan-dim)}
   h1.title{
@@ -292,7 +298,28 @@
       <a href="rules.html">Rules</a>
       <a href="pnp.html">Print &amp; Play</a>
     </nav>
-    <nav class="hud-nav">
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:0">
+    <div class="hero-main">
+      <p class="eyebrow">bring-your-own-deck arena shooter</p>
+      <h1 class="title"><span class="l1">Xonotic</span><span class="l2">on the table</span></h1>
+      <p class="lede">A trading-card game that keeps what actually makes an arena FPS feel like one — <b>speed, stack management, weapon combos, and map control</b> — and runs every game mode on <b>one shared combat engine</b>. Pick your fighter. Build your arsenal. Never stop moving.</p>
+      <div class="hero-meta">
+        <span class="chip"><b>2–6</b> players · FFA &amp; teams</span>
+        <span class="chip"><b>10</b> avatars</span>
+        <span class="chip"><b>~40</b>-card decks</span>
+        <span class="chip"><b>16</b> weapons</span>
+        <span class="chip"><b>13</b> modes · <b>1</b> engine</span>
+      </div>
+    </div>
+    <nav class="hero-jump" aria-label="Jump to section">
+      <span class="hj-label">// jump to</span>
       <a href="#engine">engine</a>
       <a href="#ffa">ffa</a>
       <a href="#avatars">avatars</a>
@@ -303,24 +330,6 @@
       <a href="#decks">decks</a>
       <a href="#ref">ref</a>
     </nav>
-  </div>
-</header>
-
-<main>
-<div class="wrap">
-
-  <!-- HERO -->
-  <section class="hero" style="border-top:0">
-    <p class="eyebrow">bring-your-own-deck arena shooter</p>
-    <h1 class="title"><span class="l1">Xonotic</span><span class="l2">on the table</span></h1>
-    <p class="lede">A trading-card game that keeps what actually makes an arena FPS feel like one — <b>speed, stack management, weapon combos, and map control</b> — and runs every game mode on <b>one shared combat engine</b>. Pick your fighter. Build your arsenal. Never stop moving.</p>
-    <div class="hero-meta">
-      <span class="chip"><b>2–6</b> players · FFA &amp; teams</span>
-      <span class="chip"><b>10</b> avatars</span>
-      <span class="chip"><b>~40</b>-card decks</span>
-      <span class="chip"><b>16</b> weapons</span>
-      <span class="chip"><b>13</b> modes · <b>1</b> engine</span>
-    </div>
   </section>
 
   <!-- ENGINE -->
