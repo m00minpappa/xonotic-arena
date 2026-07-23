@@ -12,14 +12,14 @@
 
   /* toolbar (screen only) */
   .bar{position:sticky;top:0;z-index:40;background:#0c1017;color:#e8eef6;border-bottom:1px solid #26303f}
-  .bar-in{max-width:216mm;margin:0 auto;padding:11px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .bar-in{max-width:1220px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
   .bar .brand{font-family:var(--mono);font-weight:700;letter-spacing:.5px}
   .bar .brand b{color:#31dbe6}
-  .bar .sp{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
-  .bar a,.bar button{font-family:var(--mono);font-size:12.5px;color:#8593a6;text-decoration:none;background:transparent;border:1px solid #26303f;padding:7px 12px;border-radius:7px;cursor:pointer}
-  .bar a:hover,.bar button:hover{color:#31dbe6;border-color:#1a99a3}
-  .bar button.primary{color:#0c1017;background:#31dbe6;border-color:#31dbe6;font-weight:700}
-  .sitenav{display:flex;gap:2px;align-items:center;order:2;background:rgba(255,255,255,.05);border:1px solid #26303f;border-radius:9px;padding:3px}
+  .bar .sp{display:flex;gap:8px;flex-wrap:wrap}
+  .bar .sp button{font-family:var(--mono);font-size:12.5px;color:#8593a6;text-decoration:none;background:transparent;border:1px solid #26303f;padding:7px 12px;border-radius:7px;cursor:pointer}
+  .bar .sp button:hover{color:#31dbe6;border-color:#1a99a3}
+  .bar .sp button.primary{color:#0c1017;background:#31dbe6;border-color:#31dbe6;font-weight:700}
+  .sitenav{display:flex;gap:2px;align-items:center;margin-left:auto;background:rgba(255,255,255,.045);border:1px solid #26303f;border-radius:9px;padding:3px}
   .sitenav a,.sitenav span{font-family:var(--mono);font-size:12.5px;letter-spacing:.3px;text-decoration:none;color:#8593a6;padding:5px 11px;border-radius:6px;white-space:nowrap}
   .sitenav a:hover{color:#31dbe6;background:rgba(49,219,230,.08)}
   .sitenav .active{color:#0c1017;background:#31dbe6;font-weight:700}
@@ -138,14 +138,14 @@
 <div class="bar">
   <div class="bar-in">
     <span class="brand"><b>XONOTIC</b>:ARENA · v0.2</span>
+    <span class="sp">
+      <button class="primary" onclick="window.print()">⎙ Print</button>
+    </span>
     <nav class="sitenav">
       <a href="index.html">Gallery</a>
       <a href="rules.html">Rules</a>
       <span class="active">Print &amp; Play</span>
     </nav>
-    <span class="sp">
-      <button class="primary" onclick="window.print()">⎙ Print</button>
-    </span>
   </div>
 </div>
 
