@@ -307,6 +307,8 @@
           <tr><td>🎧 meth_invader<br><span style="color:var(--muted2)">All-Ears</span></td><td>Ignores enemy Cloak/Invis; may Reaction to <b>any</b> action anywhere on the map</td><td><b>Tuned Out</b> — can't receive any ally buff or heal</td><td><b>Wallhack</b> · 1×/game · reveal all enemy hands + free Reactions till your next turn</td></tr>
           <tr><td>🦝 trashpanda<br><span style="color:var(--muted2)">The Perch</span></td><td>Didn't move last turn: hitscan <b>+6</b>, may fire Long at any node</td><td><b>Unhurried</b> — <b>−1 Action</b>/turn and <b>always acts last</b> in the round</td><td><b>Overwatch</b> · 1×/round · first enemy into your lane takes a free hitscan shot</td></tr>
           <tr><td>👴 jared<br><span style="color:var(--muted2)">The Boomer</span></td><td>Immune to knockback &amp; all status; can't be Bountied</td><td><b>Boomer</b> — hand 3, −1 Action, no Reactions/jump-tech, weapons −3</td><td><b>Boomer Rage</b> · 1×/game · +2 Actions, ignore damage penalty, shots maximized</td></tr>
+          <tr><td>🃏 wildcard<br><span style="color:var(--muted2)">The Coin-Flip</span></td><td>Start of turn, flip: <b>heads</b> → +6 damage &amp; +2 Momentum all turn</td><td><b>Tails</b> → +8 taken from every hit and shots −4 (no in-between)</td><td><b>Double Down</b> · 1×/game · call a flip — heads: maximized + 2 Actions; tails: take 25 &amp; skip turn</td></tr>
+          <tr><td>🔧 seajay<br><span style="color:var(--muted2)">The Wrench</span></td><td>Once/turn <b>cancel any Fighter's played card</b> (foe, ally, or your own); take 10</td><td><b>Loose Bolts</b> — your own Reactions/Signatures fizzle on a coin-flip tails (still pay)</td><td><b>Throw a Wrench</b> · 1×/game · until your next turn: no Signatures, item dials stop, Powerups paused</td></tr>
         </tbody>
       </table></div>
     </section>
@@ -331,8 +333,8 @@
 
     <!-- 11 DECKS -->
     <section class="rule" id="decks">
-      <h2><span class="h2n">11</span>The Ten Signature Decks</h2>
-      <p class="lead">One ready-to-sleeve 40-card deck per teammate, tuned to their Avatar. Each obeys the deckbuilding rules above — including the ones that hurt: mouseeyeeater runs <b>zero Reactions</b>, Bingus and trashpanda run almost <b>no movement</b>, and jared runs <b>neither Reactions nor jump-tech</b>, so his deck is all guns and stack.</p>
+      <h2><span class="h2n">11</span>The Twelve Signature Decks</h2>
+      <p class="lead">One ready-to-sleeve 40-card deck per teammate, tuned to their Avatar. Each obeys the deckbuilding rules above — including the ones that hurt: mouseeyeeater runs <b>zero Reactions</b>, Bingus and trashpanda run almost <b>no movement</b>, and jared runs <b>neither Reactions nor jump-tech</b>, so his deck is all guns and stack. The two house non-players play their own way too — <b>wildcard</b> lives and dies on a coin flip, and <b>seajay</b> can jam his own gear as readily as the enemy's.</p>
       <div class="decks" id="deckGal"></div>
     </section>
 
@@ -440,6 +442,18 @@ const DECKS=[
         ['Movement',[[3,'Ramp Slide']]],
         ['Field items',[[3,'Mega Health'],[3,'Mega Armor'],[3,'Shard'],[3,'Ammo Pack'],[2,'Strength'],[2,'Shield'],[2,'Speed']]]],
   pilot:'jared can’t play <b>Reactions or jump-tech</b> and draws only 3 a turn — so there are none, and every card has to hit hard on its own. Stack Megas (you’re <b>immune to knockback and all status</b>, so just walk it in), point big weapons, and cash <b>Boomer Rage</b> for your one glorious turn.'},
+ {n:'Boom or Bust',who:'wildcard · The Coin-Flip',port:'🃏',ac:'#d63a3a',ammo:'Rockets · Shells',plan:'swing for the fences, ride the hot hand',
+  cats:[['Weapons',[[3,'Devastator'],[3,'Fireball'],[3,'Shotgun'],[2,'Mortar'],[2,'Vortex']]],
+        ['Movement',[[3,'Rocket Jump'],[3,'Bunnyhop'],[2,'Strafe Jump']]],
+        ['Reactions',[[3,'Airshot'],[2,'Dodge']]],
+        ['Field items',[[2,'Strength'],[2,'Speed'],[3,'Mega Health'],[3,'Shard'],[2,'Mega Armor'],[2,'Ammo Pack']]]],
+  pilot:'Everything here is a haymaker. On a <b>heads</b> turn (+6, +2 Momentum) dump Devastator and Fireball and end people fast; on <b>tails</b> (+8 taken, −4 shots) bank a <b>Dodge</b>, grab stack, and just survive to the next flip. Hold <b>Double Down</b> for a fight you have to win — and enjoy it either way.'},
+ {n:'Monkeywrench',who:'seajay · The Wrench',port:'🔧',ac:'#1f7fb8',ammo:'Cells · Rockets',plan:'jam their plan, outlast your own',
+  cats:[['Weapons',[[3,'Electro'],[3,'Crylink'],[3,'Machine Gun'],[2,'Mine Layer'],[2,'Mortar']]],
+        ['Movement',[[3,'Ramp Slide'],[3,'Bunnyhop'],[2,'Strafe Jump']]],
+        ['Reactions',[[3,'Camp Break'],[3,'Dodge'],[2,'Air Control']]],
+        ['Field items',[[2,'Shield'],[2,'Mega Health'],[2,'Mega Armor'],[3,'Shard'],[2,'Ammo Pack']]]],
+  pilot:'Space the board with Electro blobs and Mines, then <b>Monkeywrench</b> the one card that would win their round (eat the 10 — it’s worth it). Run <b>extra Reactions</b> because <b>Loose Bolts</b> fizzles some of yours. Save <b>Throw a Wrench</b> for the crux — freeze every Signature, dial and Powerup at once and watch both game plans fall apart.'},
 ];
 document.getElementById('deckGal').innerHTML = DECKS.map(d=>{
   const total = d.cats.reduce((t,c)=>t+c[1].reduce((s,x)=>s+x[0],0),0);

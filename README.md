@@ -8,13 +8,13 @@ A **bring-your-own-deck trading card game** that turns the open-source arena FPS
 
 | Page | What it is |
 |------|-----------|
-| [**Card Gallery**](index.html) | The pitch + the full card art — engine, 16 weapons, 10 avatars, items, modes, starter decks |
-| [**Complete Rules**](rules.html) | The manual — turn structure, combat math, all modes, deckbuilding, ten signature decks |
+| [**Card Gallery**](index.html) | The pitch + the full card art — engine, 16 weapons, 12 avatars, items, modes, starter decks |
+| [**Complete Rules**](rules.html) | The manual — turn structure, combat math, all modes, deckbuilding, twelve signature decks |
 | [**Print & Play**](pnp.html) | A printable kit — cut-out cards, location tiles, tokens, and fighter mats (US Letter, 100% scale) |
 
 ## About the avatars
 
-The ten Fighter avatars are modeled on a real playgroup — each with a buff, a nerf, and a limited-use signature: **idfarms** (the Farmer), **Dr. Shrimp Puerto Rico** (the Clutch), **slipperysalamander** (the Runner), **mouseeyeeater** (the Rookie), **Bingus** (the Machine), **booger** (the Faithful), **kelso** (the Ambusher), **meth_invader** (All-Ears), **trashpanda** (the Perch), and **jared** (the Boomer).
+The twelve Fighter avatars each carry a buff, a nerf, and a limited-use signature. Ten are modeled on a real playgroup: **idfarms** (the Farmer), **Dr. Shrimp Puerto Rico** (the Clutch), **slipperysalamander** (the Runner), **mouseeyeeater** (the Rookie), **Bingus** (the Machine), **booger** (the Faithful), **kelso** (the Ambusher), **meth_invader** (All-Ears), **trashpanda** (the Perch), and **jared** (the Boomer). Two are house non-players for the empty seats: **wildcard** (the Coin-Flip — boom or bust, enthusiastic either way) and **seajay** (the Wrench — a can-do saboteur who jams anyone's plan, his own included).
 
 ## Balance — playtested v0.2
 

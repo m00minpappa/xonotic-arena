@@ -312,7 +312,7 @@
       <p class="lede">A trading-card game that keeps what actually makes an arena FPS feel like one — <b>speed, stack management, weapon combos, and map control</b> — and runs every game mode on <b>one shared combat engine</b>. Pick your fighter. Build your arsenal. Never stop moving.</p>
       <div class="hero-meta">
         <span class="chip"><b>2–6</b> players · FFA &amp; teams</span>
-        <span class="chip"><b>10</b> avatars</span>
+        <span class="chip"><b>12</b> avatars</span>
         <span class="chip"><b>~40</b>-card decks</span>
         <span class="chip"><b>16</b> weapons</span>
         <span class="chip"><b>13</b> modes · <b>1</b> engine</span>
@@ -430,7 +430,7 @@
   <!-- AVATARS -->
   <section id="avatars">
     <div class="sec-head"><span class="sec-num">03</span><h2>Avatars</h2></div>
-    <p class="sec-sub">Your Fighter isn't a token — it's an <b>Avatar card</b> you place on the board. It marks your location and proximity, and it carries an always-on <b>buff + debuff</b> plus a limited-use <b>Signature</b>. You pick <em>who you are</em> (the avatar) separately from <em>what you carry</em> (the deck) — two identity layers that combo. This roster is modeled on one real playgroup: <b>buffs, nerfs and reputations all intact.</b></p>
+    <p class="sec-sub">Your Fighter isn't a token — it's an <b>Avatar card</b> you place on the board. It marks your location and proximity, and it carries an always-on <b>buff + debuff</b> plus a limited-use <b>Signature</b>. You pick <em>who you are</em> (the avatar) separately from <em>what you carry</em> (the deck) — two identity layers that combo. This roster is modeled on one real playgroup — <b>buffs, nerfs and reputations all intact</b> — plus two house non-players, <b>wildcard</b> and <b>seajay</b>, for the empty seats.</p>
 
     <div class="callout"><span class="ico">◈</span><p><b>Draft first, reveal decks second.</b> Players lock in avatars before decks are shown, so the pick can read and counter the table — a room full of snipers makes <b>slipperysalamander</b>'s cloak look very good, and a stack of splash decks is what <b>booger</b>'s Rally is for. Buffs and nerfs are passive; the Signature is a once-per-round or once-per-game trump card. Affinity tells you the archetype an avatar wants, but any of them can pilot any deck.</p></div>
 
@@ -471,7 +471,7 @@
     <div class="sec-head"><span class="sec-num">08</span><h2>Starter Decks</h2></div>
     <p class="sec-sub">Three tuned archetypes to learn on. Ammo forces commitment — you can't run everything, so each deck wants a different range and a different rhythm.</p>
     <div class="decks" id="deckGal"></div>
-    <div class="callout"><span class="ico">◈</span><p><b>Deckbuilding rule of thumb:</b> ~40 cards — about <b>10 weapons</b> sharing 1–2 ammo types, <b>~12 movement/tech</b>, <b>~8 reactions</b>, and <b>~6 powerups</b> plus a few flex slots. Limits: max 3 of any card, max 2 of any single powerup, 6 powerups total. The core weapons (Blaster, Shotgun, Machine Gun) are commons every deck may run. <b>The rulebook builds a full 40-card signature deck for each of the ten avatars.</b></p></div>
+    <div class="callout"><span class="ico">◈</span><p><b>Deckbuilding rule of thumb:</b> ~40 cards — about <b>10 weapons</b> sharing 1–2 ammo types, <b>~12 movement/tech</b>, <b>~8 reactions</b>, and <b>~6 powerups</b> plus a few flex slots. Limits: max 3 of any card, max 2 of any single powerup, 6 powerups total. The core weapons (Blaster, Shotgun, Machine Gun) are commons every deck may run. <b>The rulebook builds a full 40-card signature deck for each of the twelve avatars.</b></p></div>
   </section>
 
   <!-- REFERENCE -->
@@ -615,6 +615,14 @@ const AVATARS=[
    buff:'<b>Doesn\'t Care</b> — jared ignores what he doesn\'t get: <b>immune to knockback, burn, freeze, slow and every status</b>, and no one scores a Bounty on him.',
    debuff:'<b>Boomer</b> — hand <b>3</b>, <b>−1 Action</b>, can\'t play Reactions or jump-tech, weapons <b>−3</b>. He did not ask for this.',
    sig:'<b>Boomer Rage</b> · once/game · fed up, he actually tries: this turn <b>+2 Actions</b>, ignore his damage penalty, every shot <b>maximized</b>.'},
+  {n:'wildcard',arch:'The Coin-Flip',ac:'#ff5c5c',port:'🃏',aff:'high-variance · boom or bust',
+   buff:'<b>Hot Hand</b> — at the start of each turn, flip a coin. <b>Heads:</b> weapon damage <b>+6</b> and <b>+2 Momentum</b> all turn. He plays every card like it already came up heads.',
+   debuff:'<b>Cold Streak</b> — on <b>tails</b> he takes <b>+8</b> from every hit this turn and his shots are <b>−4</b> (bleeding all over the map). There is no in-between.',
+   sig:'<b>Double Down</b> · once/game · call it before a flip — <b>heads</b>: this turn every shot is <b>maximized</b> and <b>+2 Actions</b>; <b>tails</b>: take a flat <b>25</b> and skip your turn. All or nothing, and he loves it either way.'},
+  {n:'seajay',arch:'The Wrench',ac:'#3fa7e0',port:'🔧',aff:'disruption · a wrench in the works',
+   buff:'<b>Monkeywrench</b> — once per turn, when <em>any</em> Fighter (foe, ally, or you) plays a card, you may <b>cancel it</b> — but you take <b>10</b> for the trouble. Can-do, whoever\'s plan it wrecks.',
+   debuff:'<b>Loose Bolts</b> — his own gear jams just as easily: whenever <b>you</b> play a Reaction or Signature, flip a coin; on <b>tails</b> it fizzles (still pay the cost).',
+   sig:'<b>Throw a Wrench</b> · once/game · jam the board until your next turn — <b>no Signatures may be played, item dials stop, and every active Powerup is paused</b>. Chaos, evenly shared.'},
 ];
 
 const TECH=[
